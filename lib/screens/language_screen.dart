@@ -30,10 +30,12 @@ class LanguagesScreenState extends State<LanguagesScreen> {
       appBarTitle: language.language,
       child: LanguageListWidget(
         widgetType: WidgetType.LIST,
-        onLanguageChange: (v) {
-          appStore.setLanguage(v.languageCode!);
+        onLanguageChange: (v) async {
+          await appStore.setLanguage(v.languageCode!);
           setState(() {});
-          finish(context, true);
+
+          // Force app restart to apply font changes
+          RestartAppWidget.init(context);
         },
       ),
     );

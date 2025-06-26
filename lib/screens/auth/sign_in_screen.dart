@@ -11,6 +11,7 @@ import 'package:booking_system_flutter/utils/configs.dart';
 import 'package:booking_system_flutter/utils/constant.dart';
 import 'package:booking_system_flutter/utils/images.dart';
 import 'package:booking_system_flutter/utils/string_extensions.dart';
+import 'package:booking_system_flutter/app_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
@@ -25,7 +26,10 @@ class SignInScreen extends StatefulWidget {
   final bool? isFromServiceBooking;
   final bool returnExpected;
 
-  SignInScreen({this.isFromDashboard, this.isFromServiceBooking, this.returnExpected = false});
+  SignInScreen(
+      {this.isFromDashboard,
+      this.isFromServiceBooking,
+      this.returnExpected = false});
 
   @override
   _SignInScreenState createState() => _SignInScreenState();
@@ -100,64 +104,69 @@ class _SignInScreenState extends State<SignInScreen> {
   }
 
   void googleSignIn() async {
-    if(!appStore.isLoading){
-    appStore.setLoading(true);
-    await authService.signInWithGoogle(context).then((googleUser) async {
-      String firstName = '';
-      String lastName = '';
-      if (googleUser.displayName.validate().split(' ').length >= 1) firstName = googleUser.displayName.splitBefore(' ');
-      if (googleUser.displayName.validate().split(' ').length >= 2) lastName = googleUser.displayName.splitAfter(' ');
+    if (!appStore.isLoading) {
+      appStore.setLoading(true);
+      await authService.signInWithGoogle(context).then((googleUser) async {
+        String firstName = '';
+        String lastName = '';
+        if (googleUser.displayName.validate().split(' ').length >= 1)
+          firstName = googleUser.displayName.splitBefore(' ');
+        if (googleUser.displayName.validate().split(' ').length >= 2)
+          lastName = googleUser.displayName.splitAfter(' ');
 
-      Map<String, dynamic> request = {
-        'first_name': firstName,
-        'last_name': lastName,
-        'email': googleUser.email,
-        'username': googleUser.email.splitBefore('@').replaceAll('.', '').toLowerCase(),
-        // 'password': passwordCont.text.trim(),
-        'social_image': googleUser.photoURL,
-        'login_type': LOGIN_TYPE_GOOGLE,
-      };
-      var loginResponse = await loginUser(request, isSocialLogin: true);
+        Map<String, dynamic> request = {
+          'first_name': firstName,
+          'last_name': lastName,
+          'email': googleUser.email,
+          'username': googleUser.email
+              .splitBefore('@')
+              .replaceAll('.', '')
+              .toLowerCase(),
+          // 'password': passwordCont.text.trim(),
+          'social_image': googleUser.photoURL,
+          'login_type': LOGIN_TYPE_GOOGLE,
+        };
+        var loginResponse = await loginUser(request, isSocialLogin: true);
 
-      loginResponse.userData!.profileImage = googleUser.photoURL.validate();
+        loginResponse.userData!.profileImage = googleUser.photoURL.validate();
 
-      await saveUserData(loginResponse.userData!);
-      appStore.setLoginType(LOGIN_TYPE_GOOGLE);
+        await saveUserData(loginResponse.userData!);
+        appStore.setLoginType(LOGIN_TYPE_GOOGLE);
 
-      authService.verifyFirebaseUser();
+        authService.verifyFirebaseUser();
 
-      onLoginSuccessRedirection();
-      appStore.setLoading(false);
-    }).catchError((e) {
-      appStore.setLoading(false);
-      log(e.toString());
-      toast(e.toString());
-    });
+        onLoginSuccessRedirection();
+        appStore.setLoading(false);
+      }).catchError((e) {
+        appStore.setLoading(false);
+        log(e.toString());
+        toast(e.toString());
+      });
     }
   }
 
   void appleSign() async {
-    if(!appStore.isLoading){
-    appStore.setLoading(true);
+    if (!appStore.isLoading) {
+      appStore.setLoading(true);
 
-    await authService.appleSignIn().then((req) async {
-      await loginUser(req, isSocialLogin: true).then((value) async {
-        await saveUserData(value.userData!);
-        appStore.setLoginType(LOGIN_TYPE_APPLE);
+      await authService.appleSignIn().then((req) async {
+        await loginUser(req, isSocialLogin: true).then((value) async {
+          await saveUserData(value.userData!);
+          appStore.setLoginType(LOGIN_TYPE_APPLE);
 
-        appStore.setLoading(false);
-        authService.verifyFirebaseUser();
+          appStore.setLoading(false);
+          authService.verifyFirebaseUser();
 
-        onLoginSuccessRedirection();
+          onLoginSuccessRedirection();
+        }).catchError((e) {
+          appStore.setLoading(false);
+          log(e.toString());
+          throw e;
+        });
       }).catchError((e) {
         appStore.setLoading(false);
-        log(e.toString());
-        throw e;
+        toast(e.toString());
       });
-    }).catchError((e) {
-      appStore.setLoading(false);
-      toast(e.toString());
-    });
     }
   }
 
@@ -170,14 +179,18 @@ class _SignInScreenState extends State<SignInScreen> {
   void onLoginSuccessRedirection() {
     afterBuildCreated(() {
       appStore.setLoading(false);
-      if (widget.isFromServiceBooking.validate() || widget.isFromDashboard.validate() || widget.returnExpected.validate()) {
+      if (widget.isFromServiceBooking.validate() ||
+          widget.isFromDashboard.validate() ||
+          widget.returnExpected.validate()) {
         if (widget.isFromDashboard.validate()) {
-          push(DashboardScreen(redirectToBooking: true), isNewTask: true, pageRouteAnimation: PageRouteAnimation.Fade);
+          push(DashboardScreen(redirectToBooking: true),
+              isNewTask: true, pageRouteAnimation: PageRouteAnimation.Fade);
         } else {
           finish(context, true);
         }
       } else {
-        DashboardScreen().launch(context, isNewTask: true, pageRouteAnimation: PageRouteAnimation.Fade);
+        DashboardScreen().launch(context,
+            isNewTask: true, pageRouteAnimation: PageRouteAnimation.Fade);
       }
     });
   }
@@ -189,9 +202,30 @@ class _SignInScreenState extends State<SignInScreen> {
     return Container(
       child: Column(
         children: [
-          Text("${language.lblLoginTitle}!", style: boldTextStyle(size: 20)).center(),
+          // Colorful Kangoo Logo
+          Container(
+            height: 120,
+            child: Image.asset(logoType),
+          ),
+          24.height,
+          // Colorful Welcome Text
+          Text(
+            "Welcome!",
+            style: boldTextStyle(
+              size: 32,
+              color: context.brandColors.brandBlue,
+              fontFamily: 'Gluten',
+            ),
+          ).center(),
           16.height,
-          Text(language.lblLoginSubTitle, style: primaryTextStyle(size: 14), textAlign: TextAlign.center).center().paddingSymmetric(horizontal: 32),
+          Text(
+            language.lblLoginSubTitle,
+            style: primaryTextStyle(
+              size: 16,
+              color: appTextSecondaryColor,
+            ),
+            textAlign: TextAlign.center,
+          ).center().paddingSymmetric(horizontal: 32),
           32.height,
         ],
       ),
@@ -206,8 +240,8 @@ class _SignInScreenState extends State<SignInScreen> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             RoundedCheckBox(
-              borderColor: context.primaryColor,
-              checkedColor: context.primaryColor,
+              borderColor: context.brandColors.brandGreen,
+              checkedColor: context.brandColors.brandGreen,
               isChecked: isRemember,
               text: language.rememberMe,
               textStyle: secondaryTextStyle(),
@@ -229,7 +263,9 @@ class _SignInScreenState extends State<SignInScreen> {
               },
               child: Text(
                 language.forgotPassword,
-                style: boldTextStyle(color: primaryColor, fontStyle: FontStyle.italic),
+                style: boldTextStyle(
+                    color: context.brandColors.brandRed,
+                    fontStyle: FontStyle.italic),
                 textAlign: TextAlign.right,
               ),
             ).flexible(),
@@ -238,8 +274,9 @@ class _SignInScreenState extends State<SignInScreen> {
         24.height,
         AppButton(
           text: language.signIn,
-          color: primaryColor,
+          color: context.brandColors.brandBlue,
           textColor: Colors.white,
+          textStyle: boldTextStyle(color: Colors.white, fontFamily: 'Gluten'),
           width: context.width() - context.navigationBarHeight,
           onTap: () {
             _handleLogin();
@@ -258,8 +295,9 @@ class _SignInScreenState extends State<SignInScreen> {
               child: Text(
                 language.signUp,
                 style: boldTextStyle(
-                  color: primaryColor,
+                  color: context.brandColors.brandBlue,
                   decoration: TextDecoration.underline,
+                  fontFamily: 'Gluten',
                 ),
               ),
             ),
@@ -269,9 +307,13 @@ class _SignInScreenState extends State<SignInScreen> {
           onPressed: () {
             if (isAndroid) {
               if (getStringAsync(PROVIDER_PLAY_STORE_URL).isNotEmpty) {
-                launchUrl(Uri.parse(getStringAsync(PROVIDER_PLAY_STORE_URL)), mode: LaunchMode.externalApplication);
+                launchUrl(Uri.parse(getStringAsync(PROVIDER_PLAY_STORE_URL)),
+                    mode: LaunchMode.externalApplication);
               } else {
-                launchUrl(Uri.parse('${getSocialMediaLink(LinkProvider.PLAY_STORE)}$PROVIDER_PACKAGE_NAME'), mode: LaunchMode.externalApplication);
+                launchUrl(
+                    Uri.parse(
+                        '${getSocialMediaLink(LinkProvider.PLAY_STORE)}$PROVIDER_PACKAGE_NAME'),
+                    mode: LaunchMode.externalApplication);
               }
             } else if (isIOS) {
               if (getStringAsync(PROVIDER_APPSTORE_URL).isNotEmpty) {
@@ -281,7 +323,8 @@ class _SignInScreenState extends State<SignInScreen> {
               }
             }
           },
-          child: Text(language.lblRegisterAsPartner, style: boldTextStyle(color: primaryColor)),
+          child: Text(language.lblRegisterAsPartner,
+              style: boldTextStyle(color: context.brandColors.brandBlue)),
         )
       ],
     );
@@ -292,7 +335,9 @@ class _SignInScreenState extends State<SignInScreen> {
       return Column(
         children: [
           20.height,
-          if ((appConfigurationStore.googleLoginStatus || appConfigurationStore.otpLoginStatus) || (isIOS && appConfigurationStore.appleLoginStatus))
+          if ((appConfigurationStore.googleLoginStatus ||
+                  appConfigurationStore.otpLoginStatus) ||
+              (isIOS && appConfigurationStore.appleLoginStatus))
             Row(
               children: [
                 Divider(color: context.dividerColor, thickness: 2).expand(),
@@ -315,12 +360,16 @@ class _SignInScreenState extends State<SignInScreen> {
                   Container(
                     padding: EdgeInsets.all(12),
                     decoration: boxDecorationWithRoundedCorners(
-                      backgroundColor: primaryColor.withValues(alpha:0.1),
+                      backgroundColor:
+                          context.brandColors.brandRed.withValues(alpha: 0.1),
                       boxShape: BoxShape.circle,
                     ),
                     child: GoogleLogoWidget(size: 16),
                   ),
-                  Text(language.lblSignInWithGoogle, style: boldTextStyle(size: 12), textAlign: TextAlign.center).expand(),
+                  Text(language.lblSignInWithGoogle,
+                          style: boldTextStyle(size: 12),
+                          textAlign: TextAlign.center)
+                      .expand(),
                 ],
               ),
               onTap: googleSignIn,
@@ -338,12 +387,19 @@ class _SignInScreenState extends State<SignInScreen> {
                   Container(
                     padding: EdgeInsets.all(8),
                     decoration: boxDecorationWithRoundedCorners(
-                      backgroundColor: primaryColor.withValues(alpha:0.1),
+                      backgroundColor: context.brandColors.brandYellow
+                          .withValues(alpha: 0.1),
                       boxShape: BoxShape.circle,
                     ),
-                    child: ic_calling.iconImage(size: 18, color: primaryColor).paddingAll(4),
+                    child: ic_calling
+                        .iconImage(
+                            size: 18, color: context.brandColors.brandYellow)
+                        .paddingAll(4),
                   ),
-                  Text(language.lblSignInWithOTP, style: boldTextStyle(size: 12), textAlign: TextAlign.center).expand(),
+                  Text(language.lblSignInWithOTP,
+                          style: boldTextStyle(size: 12),
+                          textAlign: TextAlign.center)
+                      .expand(),
                 ],
               ),
               onTap: otpSignIn,
@@ -362,12 +418,17 @@ class _SignInScreenState extends State<SignInScreen> {
                     Container(
                       padding: EdgeInsets.all(8),
                       decoration: boxDecorationWithRoundedCorners(
-                        backgroundColor: primaryColor.withValues(alpha:0.1),
+                        backgroundColor: context.brandColors.brandGreen
+                            .withValues(alpha: 0.1),
                         boxShape: BoxShape.circle,
                       ),
-                      child: Icon(Icons.apple),
+                      child: Icon(Icons.apple,
+                          color: context.brandColors.brandGreen),
                     ),
-                    Text(language.lblSignInWithApple, style: boldTextStyle(size: 12), textAlign: TextAlign.center).expand(),
+                    Text(language.lblSignInWithApple,
+                            style: boldTextStyle(size: 12),
+                            textAlign: TextAlign.center)
+                        .expand(),
                   ],
                 ),
                 onTap: appleSign,
@@ -389,11 +450,14 @@ class _SignInScreenState extends State<SignInScreen> {
   @override
   void dispose() {
     if (widget.isFromServiceBooking.validate()) {
-      setStatusBarColor(Colors.transparent, statusBarIconBrightness: Brightness.dark);
+      setStatusBarColor(Colors.transparent,
+          statusBarIconBrightness: Brightness.dark);
     } else if (widget.isFromDashboard.validate()) {
-      setStatusBarColor(Colors.transparent, statusBarIconBrightness: Brightness.light);
+      setStatusBarColor(Colors.transparent,
+          statusBarIconBrightness: Brightness.light);
     } else {
-      setStatusBarColor(primaryColor, statusBarIconBrightness: Brightness.light);
+      setStatusBarColor(primaryColor,
+          statusBarIconBrightness: Brightness.light);
     }
     super.dispose();
   }
@@ -407,14 +471,20 @@ class _SignInScreenState extends State<SignInScreen> {
         appBar: AppBar(
           elevation: 0,
           backgroundColor: Colors.transparent,
-          leading: Navigator.of(context).canPop() ? Container(
+          leading: Navigator.of(context).canPop()
+              ? Container(
                   margin: EdgeInsets.only(left: 6),
                   decoration: BoxDecoration(
                     color: Theme.of(context).scaffoldBackgroundColor,
                     shape: BoxShape.circle,
-                  ),child: BackWidget(iconColor: context.iconColor)) : null,
+                  ),
+                  child: BackWidget(iconColor: context.iconColor))
+              : null,
           scrolledUnderElevation: 0,
-          systemOverlayStyle: SystemUiOverlayStyle(statusBarIconBrightness: appStore.isDarkMode ? Brightness.light : Brightness.dark, statusBarColor: context.scaffoldBackgroundColor),
+          systemOverlayStyle: SystemUiOverlayStyle(
+              statusBarIconBrightness:
+                  appStore.isDarkMode ? Brightness.light : Brightness.dark,
+              statusBarColor: context.scaffoldBackgroundColor),
         ),
         body: Body(
           child: Form(
@@ -426,7 +496,7 @@ class _SignInScreenState extends State<SignInScreen> {
                 return Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    (context.height() * 0.12).toInt().height,
+                    (context.height() * 0.05).toInt().height,
                     _buildTopWidget(),
                     AutofillGroup(
                       child: Column(
@@ -437,8 +507,28 @@ class _SignInScreenState extends State<SignInScreen> {
                             focus: emailFocus,
                             nextFocus: passwordFocus,
                             errorThisFieldRequired: language.requiredText,
-                            decoration: inputDecoration(context, labelText: language.hintEmailTxt),
-                            suffix: ic_message.iconImage(size: 10).paddingAll(14),
+                            decoration: inputDecoration(
+                              context,
+                              labelText: language.hintEmailTxt,
+                            ).copyWith(
+                              labelStyle: primaryTextStyle(
+                                  color: context.brandColors.brandGreen),
+                              enabledBorder: UnderlineInputBorder(
+                                borderSide: BorderSide(
+                                    color: context.brandColors.brandGreen,
+                                    width: 2),
+                              ),
+                              focusedBorder: UnderlineInputBorder(
+                                borderSide: BorderSide(
+                                    color: context.brandColors.brandGreen,
+                                    width: 2),
+                              ),
+                            ),
+                            suffix: ic_message
+                                .iconImage(
+                                    size: 10,
+                                    color: context.brandColors.brandGreen)
+                                .paddingAll(14),
                             autoFillHints: [AutofillHints.email],
                           ),
                           16.height,
@@ -447,9 +537,33 @@ class _SignInScreenState extends State<SignInScreen> {
                             controller: passwordCont,
                             focus: passwordFocus,
                             obscureText: true,
-                            suffixPasswordVisibleWidget: ic_show.iconImage(size: 10).paddingAll(14),
-                            suffixPasswordInvisibleWidget: ic_hide.iconImage(size: 10).paddingAll(14),
-                            decoration: inputDecoration(context, labelText: language.hintPasswordTxt),
+                            suffixPasswordVisibleWidget: ic_show
+                                .iconImage(
+                                    size: 10,
+                                    color: context.brandColors.brandGreen)
+                                .paddingAll(14),
+                            suffixPasswordInvisibleWidget: ic_hide
+                                .iconImage(
+                                    size: 10,
+                                    color: context.brandColors.brandGreen)
+                                .paddingAll(14),
+                            decoration: inputDecoration(
+                              context,
+                              labelText: language.hintPasswordTxt,
+                            ).copyWith(
+                              labelStyle: primaryTextStyle(
+                                  color: context.brandColors.brandGreen),
+                              enabledBorder: UnderlineInputBorder(
+                                borderSide: BorderSide(
+                                    color: context.brandColors.brandGreen,
+                                    width: 2),
+                              ),
+                              focusedBorder: UnderlineInputBorder(
+                                borderSide: BorderSide(
+                                    color: context.brandColors.brandGreen,
+                                    width: 2),
+                              ),
+                            ),
                             autoFillHints: [AutofillHints.password],
                             isValidationRequired: true,
                             validator: (val) {
@@ -476,6 +590,7 @@ class _SignInScreenState extends State<SignInScreen> {
             ),
           ),
         ),
-      ),);
+      ),
+    );
   }
-  }
+}

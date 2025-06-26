@@ -1,5 +1,6 @@
 const appLogo = 'assets/ic_app_logo.png';
 const iconLogo = 'assets/logo.svg';
+const logoType = 'assets/logotype.png';
 
 //region NewDashboard
 const grid = "assets/newDashboard/grid.png";

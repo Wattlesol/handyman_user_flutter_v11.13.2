@@ -13,8 +13,8 @@
     <uses-permission android:name="android.permission.BLUETOOTH_CONNECT"/>
 
     <application
-        android:icon="@mipmap/ic_launcher"
-        android:label="Handyman Service User"
+        android:icon="@mipmap/launcher_icon"
+        android:label="Kangoo"
         android:requestLegacyExternalStorage="true"
         tools:replace="android:label">
         <meta-data

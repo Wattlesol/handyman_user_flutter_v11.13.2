@@ -1,9 +1,9 @@
 import 'package:country_picker/country_picker.dart';
 import 'package:flutter/material.dart';
 
-const APP_NAME = 'Handyman Service';
-const APP_NAME_TAG_LINE = 'On-Demand Home Services App';
-var defaultPrimaryColor = Color(0xFF5F60B9);
+const APP_NAME = 'KANGOO';
+const APP_NAME_TAG_LINE = 'is a friendly guy';
+var defaultPrimaryColor = Color(0xFF4A75FB);
 
 // Don't add slash at the end of the url
 // TODO: Replace with your actual backend server URL

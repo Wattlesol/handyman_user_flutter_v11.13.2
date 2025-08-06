@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 
 abstract class BaseLanguage {
-  static BaseLanguage of(BuildContext context) => Localizations.of<BaseLanguage>(context, BaseLanguage)!;
+  static BaseLanguage of(BuildContext context) =>
+      Localizations.of<BaseLanguage>(context, BaseLanguage)!;
 
   String get walkTitle1;
 
@@ -1412,4 +1413,103 @@ abstract class BaseLanguage {
   String get pix;
 
   String get chooseWithdrawalMethod;
+
+  // Store & Product related keys
+  String get store;
+
+  String get products;
+
+  String get featuredProducts;
+
+  String get productCategories;
+
+  String get noProductsFound;
+
+  String get addToCart;
+
+  String get buyNow;
+
+  String get outOfStock;
+
+  String get inStock;
+
+  String get onSale;
+
+  String get originalPrice;
+
+  String get salePrice;
+
+  String get discount;
+
+  String get sortBy;
+
+  String get priceHighToLow;
+
+  String get priceLowToHigh;
+
+  String get newest;
+
+  String get oldest;
+
+  String get popularity;
+
+  String get rating;
+
+  String get filterByCategory;
+
+  String get allCategories;
+
+  String get searchProducts;
+
+  String get noStoreFound;
+
+  String get storeInfo;
+
+  String get storeDetails;
+
+  String get openingHours;
+
+  String get closingHours;
+
+  String get workingDays;
+
+  String get storeAddress;
+
+  String get storePhone;
+
+  String get storeEmail;
+
+  String get storeWebsite;
+
+  String get storeOpen;
+
+  String get storeClosed;
+
+  String get viewProducts;
+
+  String get productDetails;
+
+  String get productDescription;
+
+  String get productSpecifications;
+
+  String get productReviews;
+
+  String get relatedProducts;
+
+  String get productImages;
+
+  String get selectVariant;
+
+  String get quantity;
+
+  String get totalPrice;
+
+  String get productNotAvailable;
+
+  String get invalidQuantity;
+
+  String get maxQuantityReached;
+
+  String get minQuantityRequired;
 }

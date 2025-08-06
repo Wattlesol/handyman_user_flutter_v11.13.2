@@ -2117,4 +2117,200 @@ class LanguageFr extends BaseLanguage {
 
   @override
   String get chooseWithdrawalMethod => "Choisissez la méthode de retrait";
+  
+  @override
+  // TODO: implement addToCart
+  String get addToCart => throw UnimplementedError();
+  
+  @override
+  // TODO: implement allCategories
+  String get allCategories => throw UnimplementedError();
+  
+  @override
+  // TODO: implement buyNow
+  String get buyNow => throw UnimplementedError();
+  
+  @override
+  // TODO: implement closingHours
+  String get closingHours => throw UnimplementedError();
+  
+  @override
+  // TODO: implement discount
+  String get discount => throw UnimplementedError();
+  
+  @override
+  // TODO: implement featuredProducts
+  String get featuredProducts => throw UnimplementedError();
+  
+  @override
+  // TODO: implement filterByCategory
+  String get filterByCategory => throw UnimplementedError();
+  
+  @override
+  // TODO: implement inStock
+  String get inStock => throw UnimplementedError();
+  
+  @override
+  // TODO: implement invalidQuantity
+  String get invalidQuantity => throw UnimplementedError();
+  
+  @override
+  // TODO: implement maxQuantityReached
+  String get maxQuantityReached => throw UnimplementedError();
+  
+  @override
+  // TODO: implement minQuantityRequired
+  String get minQuantityRequired => throw UnimplementedError();
+  
+  @override
+  // TODO: implement newest
+  String get newest => throw UnimplementedError();
+  
+  @override
+  // TODO: implement noProductsFound
+  String get noProductsFound => throw UnimplementedError();
+  
+  @override
+  // TODO: implement noStoreFound
+  String get noStoreFound => throw UnimplementedError();
+  
+  @override
+  // TODO: implement oldest
+  String get oldest => throw UnimplementedError();
+  
+  @override
+  // TODO: implement onSale
+  String get onSale => throw UnimplementedError();
+  
+  @override
+  // TODO: implement openingHours
+  String get openingHours => throw UnimplementedError();
+  
+  @override
+  // TODO: implement originalPrice
+  String get originalPrice => throw UnimplementedError();
+  
+  @override
+  // TODO: implement outOfStock
+  String get outOfStock => throw UnimplementedError();
+  
+  @override
+  // TODO: implement popularity
+  String get popularity => throw UnimplementedError();
+  
+  @override
+  // TODO: implement priceHighToLow
+  String get priceHighToLow => throw UnimplementedError();
+  
+  @override
+  // TODO: implement priceLowToHigh
+  String get priceLowToHigh => throw UnimplementedError();
+  
+  @override
+  // TODO: implement productCategories
+  String get productCategories => throw UnimplementedError();
+  
+  @override
+  // TODO: implement productDescription
+  String get productDescription => throw UnimplementedError();
+  
+  @override
+  // TODO: implement productDetails
+  String get productDetails => throw UnimplementedError();
+  
+  @override
+  // TODO: implement productImages
+  String get productImages => throw UnimplementedError();
+  
+  @override
+  // TODO: implement productNotAvailable
+  String get productNotAvailable => throw UnimplementedError();
+  
+  @override
+  // TODO: implement productReviews
+  String get productReviews => throw UnimplementedError();
+  
+  @override
+  // TODO: implement productSpecifications
+  String get productSpecifications => throw UnimplementedError();
+  
+  @override
+  // TODO: implement products
+  String get products => throw UnimplementedError();
+  
+  @override
+  // TODO: implement quantity
+  String get quantity => throw UnimplementedError();
+  
+  @override
+  // TODO: implement rating
+  String get rating => throw UnimplementedError();
+  
+  @override
+  // TODO: implement relatedProducts
+  String get relatedProducts => throw UnimplementedError();
+  
+  @override
+  // TODO: implement salePrice
+  String get salePrice => throw UnimplementedError();
+  
+  @override
+  // TODO: implement searchProducts
+  String get searchProducts => throw UnimplementedError();
+  
+  @override
+  // TODO: implement selectVariant
+  String get selectVariant => throw UnimplementedError();
+  
+  @override
+  // TODO: implement sortBy
+  String get sortBy => throw UnimplementedError();
+  
+  @override
+  // TODO: implement store
+  String get store => throw UnimplementedError();
+  
+  @override
+  // TODO: implement storeAddress
+  String get storeAddress => throw UnimplementedError();
+  
+  @override
+  // TODO: implement storeClosed
+  String get storeClosed => throw UnimplementedError();
+  
+  @override
+  // TODO: implement storeDetails
+  String get storeDetails => throw UnimplementedError();
+  
+  @override
+  // TODO: implement storeEmail
+  String get storeEmail => throw UnimplementedError();
+  
+  @override
+  // TODO: implement storeInfo
+  String get storeInfo => throw UnimplementedError();
+  
+  @override
+  // TODO: implement storeOpen
+  String get storeOpen => throw UnimplementedError();
+  
+  @override
+  // TODO: implement storePhone
+  String get storePhone => throw UnimplementedError();
+  
+  @override
+  // TODO: implement storeWebsite
+  String get storeWebsite => throw UnimplementedError();
+  
+  @override
+  // TODO: implement totalPrice
+  String get totalPrice => throw UnimplementedError();
+  
+  @override
+  // TODO: implement viewProducts
+  String get viewProducts => throw UnimplementedError();
+  
+  @override
+  // TODO: implement workingDays
+  String get workingDays => throw UnimplementedError();
 }

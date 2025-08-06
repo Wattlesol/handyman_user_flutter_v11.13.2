@@ -569,7 +569,7 @@ class _SignInScreenState extends State<SignInScreen> {
                             validator: (val) {
                               if (val == null || val.isEmpty) {
                                 return language.requiredText;
-                              } else if (val.length < 8 || val.length > 12) {
+                              } else if (val.length < 6 || val.length > 12) {
                                 return language.passwordLengthShouldBe;
                               }
                               return null;

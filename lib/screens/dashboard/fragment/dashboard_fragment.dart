@@ -6,6 +6,8 @@ import 'package:booking_system_flutter/screens/dashboard/component/featured_serv
 import 'package:booking_system_flutter/screens/dashboard/component/service_list_component.dart';
 import 'package:booking_system_flutter/screens/dashboard/component/slider_and_location_component.dart';
 import 'package:booking_system_flutter/screens/dashboard/shimmer/dashboard_shimmer.dart';
+import 'package:booking_system_flutter/screens/store/component/featured_product_list_component.dart';
+import 'package:booking_system_flutter/model/product_data_model.dart';
 import 'package:booking_system_flutter/utils/constant.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
@@ -24,6 +26,7 @@ class DashboardFragment extends StatefulWidget {
 
 class _DashboardFragmentState extends State<DashboardFragment> {
   Future<DashboardResponse>? future;
+  List<ProductData> featuredProducts = [];
 
   @override
   void initState() {
@@ -41,9 +44,27 @@ class _DashboardFragmentState extends State<DashboardFragment> {
   }
 
   void init() async {
-    future = userDashboard(isCurrentLocation: appStore.isCurrentLocation, lat: getDoubleAsync(LATITUDE), long: getDoubleAsync(LONGITUDE));
+    future = userDashboard(
+        isCurrentLocation: appStore.isCurrentLocation,
+        lat: getDoubleAsync(LATITUDE),
+        long: getDoubleAsync(LONGITUDE));
+    loadFeaturedProducts();
     setStatusBarColorChange();
     setState(() {});
+  }
+
+  void loadFeaturedProducts() async {
+    try {
+      print('Loading featured products...');
+      var response = await getFeaturedProducts(perPage: 5);
+      featuredProducts = response.productList ?? [];
+      print('Featured products loaded: ${featuredProducts.length} products');
+      setState(() {});
+    } catch (e) {
+      print('Error loading featured products: $e');
+      featuredProducts = [];
+      setState(() {});
+    }
   }
 
   Future<void> setStatusBarColorChange() async {
@@ -118,23 +139,32 @@ class _DashboardFragmentState extends State<DashboardFragment> {
                       },
                     ),
                     30.height,
-                    PendingBookingComponent(upcomingConfirmedBooking: snap.upcomingData),
+                    PendingBookingComponent(
+                        upcomingConfirmedBooking: snap.upcomingData),
                     CategoryComponent(categoryList: snap.category.validate()),
-                    if (snap.promotionalBanner.validate().isNotEmpty  && appConfigurationStore.isPromotionalBanner)
+                    if (snap.promotionalBanner.validate().isNotEmpty &&
+                        appConfigurationStore.isPromotionalBanner)
                       PromotionalBannerSliderComponent(
-                        promotionalBannerList: snap.promotionalBanner.validate(),
+                        promotionalBannerList:
+                            snap.promotionalBanner.validate(),
                       ).paddingTop(16),
                     16.height,
-                    FeaturedServiceListComponent(serviceList: snap.featuredServices.validate()),
+                    FeaturedServiceListComponent(
+                        serviceList: snap.featuredServices.validate()),
+                    16.height,
+                    FeaturedProductListComponent(productList: featuredProducts),
                     ServiceListComponent(serviceList: snap.service.validate()),
                     16.height,
-                    if (appConfigurationStore.jobRequestStatus && rolesAndPermissionStore.postJobList) NewJobRequestComponent(),
+                    if (appConfigurationStore.jobRequestStatus &&
+                        rolesAndPermissionStore.postJobList)
+                      NewJobRequestComponent(),
                   ],
                 );
               });
             },
           ),
-          Observer(builder: (context) => LoaderWidget().visible(appStore.isLoading)),
+          Observer(
+              builder: (context) => LoaderWidget().visible(appStore.isLoading)),
         ],
       ),
     );

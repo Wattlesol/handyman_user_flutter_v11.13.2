@@ -11,7 +11,9 @@ var defaultPrimaryColor = Color(0xFF4A75FB);
 // For local development, you might use: const DOMAIN_URL = "http://10.0.2.2:8000"; (Android emulator)
 // For local development on iOS simulator: const DOMAIN_URL = "http://localhost:8000";
 
-const DOMAIN_URL = "https://handyman.wattlesol.com";
+// const DOMAIN_URL = "https://handyman.wattlesol.com";
+const DOMAIN_URL =
+    "http://10.0.2.2:8000"; // Android Emulator special IP for host machine
 const BASE_URL = '$DOMAIN_URL/api/';
 
 const DEFAULT_LANGUAGE = 'en';

@@ -1,6 +1,3 @@
-import 'dart:convert';
-
-import 'package:nb_utils/nb_utils.dart';
 
 class UserWalletHistoryResponse {
   Pagination pagination;

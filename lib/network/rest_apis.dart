@@ -27,6 +27,7 @@ import 'package:booking_system_flutter/model/user_wallet_history.dart';
 import 'package:booking_system_flutter/model/verify_transaction_response.dart';
 import 'package:booking_system_flutter/model/product_data_model.dart';
 import 'package:booking_system_flutter/model/product_response_model.dart';
+import 'package:booking_system_flutter/model/sanad_models.dart';
 
 import 'package:booking_system_flutter/network/network_utils.dart';
 import 'package:booking_system_flutter/screens/dashboard/dashboard_screen.dart';
@@ -48,6 +49,69 @@ import '../model/update_location_response.dart';
 import '../model/wallet_response.dart';
 import '../utils/app_configuration.dart';
 import '../utils/firebase_messaging_utils.dart';
+
+//region Sanad Foundation APIs
+Future<SanadFoundationResponse> getSanadFoundation() async {
+  return SanadFoundationResponse.fromJson(await handleResponse(
+      await buildHttpResponse('sanad/foundation', method: HttpMethodType.GET)));
+}
+
+Future<Map<String, dynamic>> getSanadRequests(
+    {int page = 1,
+    int perPage = PER_PAGE_ITEM,
+    String? stage,
+    String? status}) async {
+  String query = 'sanad/requests?page=$page&per_page=$perPage';
+  if (stage != null && stage.isNotEmpty) query += '&sanad_stage=$stage';
+  if (status != null && status.isNotEmpty) query += '&status=$status';
+  return Map<String, dynamic>.from(await handleResponse(
+      await buildHttpResponse(query, method: HttpMethodType.GET)));
+}
+
+Future<Map<String, dynamic>> createSanadBuzz(Map request) async {
+  return Map<String, dynamic>.from(await handleResponse(await buildHttpResponse(
+      'sanad/buzz',
+      request: request,
+      method: HttpMethodType.POST)));
+}
+
+Future<Map<String, dynamic>> getSanadBuzzAlerts(
+    {int page = 1, int perPage = PER_PAGE_ITEM, String? status}) async {
+  String query = 'sanad/buzz?page=$page&per_page=$perPage';
+  if (status != null && status.isNotEmpty) query += '&status=$status';
+  return Map<String, dynamic>.from(await handleResponse(
+      await buildHttpResponse(query, method: HttpMethodType.GET)));
+}
+
+Future<Map<String, dynamic>> getSanadDocumentVault(
+    {int page = 1, int perPage = PER_PAGE_ITEM}) async {
+  return Map<String, dynamic>.from(await handleResponse(await buildHttpResponse(
+      'sanad/document-vault?page=$page&per_page=$perPage',
+      method: HttpMethodType.GET)));
+}
+
+Future<Map<String, dynamic>> getSanadChatThreads(
+    {int page = 1, int perPage = PER_PAGE_ITEM, int? bookingId}) async {
+  String query = 'sanad/chat-threads?page=$page&per_page=$perPage';
+  if (bookingId != null && bookingId > 0) query += '&booking_id=$bookingId';
+  return Map<String, dynamic>.from(await handleResponse(
+      await buildHttpResponse(query, method: HttpMethodType.GET)));
+}
+
+Future<Map<String, dynamic>> sendSanadChatMessage(Map request) async {
+  return Map<String, dynamic>.from(await handleResponse(await buildHttpResponse(
+      'sanad/chat-messages',
+      request: request,
+      method: HttpMethodType.POST)));
+}
+
+Future<SanadAiInteraction> askSanadAi(Map request) async {
+  final res = await handleResponse(await buildHttpResponse('sanad/ai/ask',
+      request: request, method: HttpMethodType.POST));
+  return SanadAiInteraction.fromJson(
+      Map<String, dynamic>.from(res['data'] ?? {}));
+}
+//endregion
 
 //region Auth Api
 Future<LoginResponse> createUser(Map request) async {

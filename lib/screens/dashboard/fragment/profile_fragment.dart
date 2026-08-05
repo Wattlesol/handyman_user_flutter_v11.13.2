@@ -8,6 +8,7 @@ import 'package:booking_system_flutter/screens/auth/sign_in_screen.dart';
 import 'package:booking_system_flutter/screens/blog/view/blog_list_screen.dart';
 import 'package:booking_system_flutter/screens/dashboard/customer_rating_screen.dart';
 import 'package:booking_system_flutter/screens/dashboard/dashboard_screen.dart';
+import 'package:booking_system_flutter/screens/sanad/my_sanad_screen.dart';
 import 'package:booking_system_flutter/screens/service/favourite_service_screen.dart';
 import 'package:booking_system_flutter/screens/setting_screen.dart';
 import 'package:booking_system_flutter/screens/wallet/user_wallet_balance_screen.dart';
@@ -222,6 +223,21 @@ class ProfileFragmentState extends State<ProfileFragment> {
                             trailing: trailing,
                             onTap: () {
                               UserWalletHistoryScreen().launch(context);
+                            },
+                          ),
+                        if (appStore.isLoggedIn)
+                          SettingItemWidget(
+                            decoration: BoxDecoration(color: context.cardColor),
+                            leading: Icon(Icons.assignment_outlined,
+                                size: SETTING_ICON_SIZE,
+                                color: context.iconColor),
+                            title: 'My Sanad',
+                            titleTextStyle: boldTextStyle(size: 12),
+                            padding:
+                                EdgeInsets.only(top: 20, left: 16, right: 16),
+                            trailing: trailing,
+                            onTap: () {
+                              MySanadScreen().launch(context);
                             },
                           ),
                         if (appStore.isLoggedIn)

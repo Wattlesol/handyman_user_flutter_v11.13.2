@@ -549,7 +549,7 @@ Future<void> showForceUpdateDialog(BuildContext context) async {
 bool checkTimeDifference({required DateTime inputDateTime}) {
   DateTime currentTime = DateTime.now();
 
-  log("Booking Time Diffrence ==> ${inputDateTime.difference(currentTime).inHours}");
+  log("Request time difference ==> ${inputDateTime.difference(currentTime).inHours}");
   if (currentTime.isBefore(inputDateTime) && inputDateTime.difference(currentTime).inHours <= appConfigurationStore.cancellationChargeHours) {
     return true;
   }

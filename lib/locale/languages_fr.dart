@@ -283,7 +283,7 @@ class LanguageFr extends BaseLanguage {
   String get lblCall => "Appel";
 
   @override
-  String get lblRateHandyman => "Taux Handyman";
+  String get lblRateHandyman => "Évaluer Employee";
 
   @override
   String get msgForLocationOn => 'Votre emplacement est allumé. Continuez à consulter les services disponibles dans tous les domaines?';
@@ -415,7 +415,7 @@ class LanguageFr extends BaseLanguage {
   String get lblDate => "Date";
 
   @override
-  String get lblAboutHandyman => "À propos de Handyman";
+  String get lblAboutHandyman => "À propos de Employee";
 
   @override
   String get lblAboutProvider => "À propos du fournisseur";
@@ -559,7 +559,7 @@ class LanguageFr extends BaseLanguage {
   String get lblWalkThroughSubTitle => "Service $APP_NAME - Application de services à domicile à la demande avec solution complète";
 
   @override
-  String get textHandyman => "Handyman";
+  String get textHandyman => "Employee";
 
   @override
   String get lblChooseFromMap => "Choisir parmi la carte";

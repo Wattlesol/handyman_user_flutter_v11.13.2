@@ -558,7 +558,7 @@ class LanguageDe extends BaseLanguage {
   String get lblWalkThroughSubTitle => "$APP_NAME Service - On-Demand-Home Services-App mit vollständiger Lösung";
 
   @override
-  String get textHandyman => "Handyman";
+  String get textHandyman => "Employee";
 
   @override
   String get lblChooseFromMap => "Wähle aus der Karte";

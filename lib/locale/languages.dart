@@ -1512,4 +1512,8 @@ abstract class BaseLanguage {
   String get maxQuantityReached;
 
   String get minQuantityRequired;
+
+  String get sanadOperations;
+
+  String get sanadCoordinatesPartnerExecution;
 }

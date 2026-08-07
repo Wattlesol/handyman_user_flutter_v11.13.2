@@ -2355,4 +2355,11 @@ class LanguageEn extends BaseLanguage {
 
   @override
   String get minQuantityRequired => "Minimum Quantity Required";
+
+  @override
+  String get sanadOperations => "Sanad Operations";
+
+  @override
+  String get sanadCoordinatesPartnerExecution =>
+      "Sanad coordinates partner and employee execution internally.";
 }

@@ -14,7 +14,7 @@
 
     <application
         android:icon="@mipmap/launcher_icon"
-        android:label="Kangoo"
+        android:label="Sanad"
         android:requestLegacyExternalStorage="true"
         android:usesCleartextTraffic="true"
         tools:replace="android:label,android:usesCleartextTraffic">

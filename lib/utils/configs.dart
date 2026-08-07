@@ -1,8 +1,8 @@
 import 'package:country_picker/country_picker.dart';
 import 'package:flutter/material.dart';
 
-const APP_NAME = 'KANGOO';
-const APP_NAME_TAG_LINE = 'is a friendly guy';
+const APP_NAME = 'SANAD';
+const APP_NAME_TAG_LINE = 'trusted service requests';
 var defaultPrimaryColor = Color(0xFF4A75FB);
 
 // Don't add slash at the end of the url
@@ -11,31 +11,28 @@ var defaultPrimaryColor = Color(0xFF4A75FB);
 // For local development, you might use: const DOMAIN_URL = "http://10.0.2.2:8000"; (Android emulator)
 // For local development on iOS simulator: const DOMAIN_URL = "http://localhost:8000";
 
-const DOMAIN_URL = "https://handyman.wattlesol.com";
-// const DOMAIN_URL = "http://10.0.2.2:8000"; 
+const DOMAIN_URL = "https://kangoo.sa";
+// const DOMAIN_URL = "http://10.0.2.2:8000";
 const BASE_URL = '$DOMAIN_URL/api/';
 
 const DEFAULT_LANGUAGE = 'en';
 
-/// You can change this to your Provider App package name
-/// This will be used in Registered As Partner in Sign In Screen where your users can redirect to the Play/App Store for Provider App
+/// You can change this to your partner app package name.
+/// This is used when users need to continue in the Sanad partner app.
 /// You can specify in Admin Panel, These will be used if you don't specify in Admin Panel
 const PROVIDER_PACKAGE_NAME = 'com.iqonic.provider';
-const IOS_LINK_FOR_PARTNER =
-    "https://apps.apple.com/in/app/handyman-provider-app/id1596025324";
+const IOS_LINK_FOR_PARTNER = "";
 
-const IOS_LINK_FOR_USER =
-    'https://apps.apple.com/us/app/handyman-service-user/id1591427211';
+const IOS_LINK_FOR_USER = "";
 
 const DASHBOARD_AUTO_SLIDER_SECOND = 5;
 const OTP_TEXT_FIELD_LENGTH = 6;
 
-const TERMS_CONDITION_URL = 'https://iqonic.design/terms-of-use/';
-const PRIVACY_POLICY_URL = 'https://iqonic.design/privacy-policy/';
-const HELP_AND_SUPPORT_URL = 'https://iqonic.design/privacy-policy/';
-const REFUND_POLICY_URL =
-    'https://iqonic.design/licensing-terms-more/#refund-policy';
-const INQUIRY_SUPPORT_EMAIL = 'hello@iqonic.design';
+const TERMS_CONDITION_URL = 'https://kangoo.sa/term-conditions';
+const PRIVACY_POLICY_URL = 'https://kangoo.sa/privacy-policy';
+const HELP_AND_SUPPORT_URL = 'https://kangoo.sa/help-support';
+const REFUND_POLICY_URL = 'https://kangoo.sa/refund-policy';
+const INQUIRY_SUPPORT_EMAIL = 'support@sanad.local';
 
 /// You can add help line number here for contact. It's demo number
 const HELP_LINE_NUMBER = '+15265897485';

@@ -9,7 +9,7 @@ class LanguageEn extends BaseLanguage {
   String get walkTitle2 => 'Browse and Book Services';
 
   @override
-  String get walkTitle3 => 'Track and Manage Your Bookings';
+  String get walkTitle3 => 'Track and Manage Your Requests';
 
   @override
   String get getStarted => 'Get Started';
@@ -75,7 +75,7 @@ class LanguageEn extends BaseLanguage {
   String get appTheme => 'App Theme';
 
   @override
-  String get bookingHistory => 'Booking History';
+  String get bookingHistory => 'Request History';
 
   @override
   String get rateUs => 'Rate Us';
@@ -177,7 +177,7 @@ class LanguageEn extends BaseLanguage {
   String get category => 'Categories';
 
   @override
-  String get booking => 'Bookings';
+  String get booking => 'Requests';
 
   @override
   String get profile => 'Profile';
@@ -192,7 +192,7 @@ class LanguageEn extends BaseLanguage {
   String get service => 'Services';
 
   @override
-  String get lblCancelReason => 'Please give reason for canceling this Booking';
+  String get lblCancelReason => 'Please give reason for canceling this Request';
 
   @override
   String get enterReason => "Specify your reason here";
@@ -285,7 +285,7 @@ class LanguageEn extends BaseLanguage {
   String get lblCall => "Call";
 
   @override
-  String get lblRateHandyman => "Rate Handyman";
+  String get lblRateHandyman => "Rate Employee";
 
   @override
   String get msgForLocationOn =>
@@ -389,10 +389,10 @@ class LanguageEn extends BaseLanguage {
   String get lblTime => "Time";
 
   @override
-  String get textProvider => "Provider";
+  String get textProvider => "Partner";
 
   @override
-  String get lblConfirmBooking => "Confirm Booking";
+  String get lblConfirmBooking => "Confirm Request";
 
   @override
   String get lblConfirmMsg => 'Do you want to confirm this booking?';
@@ -416,16 +416,16 @@ class LanguageEn extends BaseLanguage {
   String get lblStep2 => "Step 2";
 
   @override
-  String get lblBookingID => "Booking ID";
+  String get lblBookingID => "Request ID";
 
   @override
   String get lblDate => "Date";
 
   @override
-  String get lblAboutHandyman => "About Handyman";
+  String get lblAboutHandyman => "About Employee";
 
   @override
-  String get lblAboutProvider => "About Provider";
+  String get lblAboutProvider => "About Partner";
 
   @override
   String get lblNotRatedYet => "You haven't rated yet";
@@ -446,7 +446,7 @@ class LanguageEn extends BaseLanguage {
   String get lblEndServicesMsg => "Do you want to end this service?";
 
   @override
-  String get lblCancelBooking => "Cancel Booking";
+  String get lblCancelBooking => "Cancel Request";
 
   @override
   String get lblStart => "Start";
@@ -467,7 +467,7 @@ class LanguageEn extends BaseLanguage {
   String get lblID => "ID";
 
   @override
-  String get lblNoBookingsFound => "No Bookings Found";
+  String get lblNoBookingsFound => "No Requests Found";
 
   @override
   String get lblCategory => "Category";
@@ -567,7 +567,7 @@ class LanguageEn extends BaseLanguage {
       "$APP_NAME - On-Demand Home Services App with Complete Solution";
 
   @override
-  String get textHandyman => "Handyman";
+  String get textHandyman => "Employee";
 
   @override
   String get lblChooseFromMap => "Choose From Map";
@@ -591,7 +591,7 @@ class LanguageEn extends BaseLanguage {
   String get lblLogoutSubTitle => "Do you want to logout?";
 
   @override
-  String get lblFeaturedProduct => "This is Featured Product";
+  String get lblFeaturedProduct => "This is Featured Service Item";
 
   @override
   String get lblAlert => "Alert";
@@ -740,7 +740,7 @@ class LanguageEn extends BaseLanguage {
   String get lblSignInWithApple => "Sign in with Apple";
 
   @override
-  String get lblWaitingForProviderApproval => "Waiting for Provider Approval";
+  String get lblWaitingForProviderApproval => "Waiting for Partner Approval";
 
   @override
   String get lblFree => "Free";
@@ -775,7 +775,7 @@ class LanguageEn extends BaseLanguage {
   String get noCategoryFound => "No Category Found";
 
   @override
-  String get noProviderFound => "No Provider Found";
+  String get noProviderFound => "No Partner Found";
 
   @override
   String get createServiceRequest => "Create Service";
@@ -793,10 +793,10 @@ class LanguageEn extends BaseLanguage {
   String get newPostJobRequest => "Post New Job Request";
 
   @override
-  String get postJobTitle => "Post Job Title";
+  String get postJobTitle => "Service Request Title";
 
   @override
-  String get postJobDescription => "Post Job Description";
+  String get postJobDescription => "Service Request Description";
 
   @override
   String get services => "Services";
@@ -863,7 +863,7 @@ class LanguageEn extends BaseLanguage {
 
   @override
   String get createPostJobWithoutSelectService =>
-      'You can\'t create post job without selecting service';
+      'You can\'t create service request without selecting service';
 
   @override
   String get selectCategory => 'Select Category';
@@ -885,7 +885,7 @@ class LanguageEn extends BaseLanguage {
   String get bidder => 'Bidder List';
 
   @override
-  String get assignedProvider => 'Assigned Provider';
+  String get assignedProvider => 'Assigned Partner';
 
   @override
   String get myPostDetail => 'My Post Detail';
@@ -906,11 +906,11 @@ class LanguageEn extends BaseLanguage {
   String get noServiceAdded => 'No Service Added';
 
   @override
-  String get noPostJobFound => 'No Post Job Found';
+  String get noPostJobFound => 'No Service Request Found';
 
   @override
   String get noPostJobFoundSubtitle =>
-      'When you post your job, every Provider will notified, and you can choose your desired Provider to get the job done.';
+      'When you post your job, every Partner will notified, and you can choose your desired Partner to get the job done.';
 
   @override
   String get pleaseEnterValidOTP => 'Please enter Valid OTP';
@@ -929,7 +929,7 @@ class LanguageEn extends BaseLanguage {
   String get pleaseSelectTheSlotsFirst => 'Please select the slots first';
 
   @override
-  String get editTimeSlotsBooking => 'Edit Time Slots Booking';
+  String get editTimeSlotsBooking => 'Edit Time Slots Request';
 
   @override
   String get availableSlots => 'Available Slots';
@@ -938,7 +938,7 @@ class LanguageEn extends BaseLanguage {
   String get noTimeSlots => 'No Time Slots';
 
   @override
-  String get bookingDateAndSlot => 'Booking Date & Slot';
+  String get bookingDateAndSlot => 'Request Date & Slot';
 
   @override
   String get extraCharges => 'Extra Charges';
@@ -991,7 +991,7 @@ class LanguageEn extends BaseLanguage {
   String get somethingWentWrong => 'Something Went Wrong';
 
   @override
-  String get postJob => 'Post Job';
+  String get postJob => 'Service Request';
 
   @override
   String get package => 'Package';
@@ -1080,7 +1080,7 @@ class LanguageEn extends BaseLanguage {
       'Do you want to delete the message?';
 
   @override
-  String get favouriteProvider => 'Favourite Provider';
+  String get favouriteProvider => 'Favourite Partner';
 
   @override
   String get noProviderFoundMessage =>
@@ -1316,11 +1316,11 @@ class LanguageEn extends BaseLanguage {
   String get closeApp => 'Close App';
 
   @override
-  String get providerAddedToFavourite => 'Provider added to Favourite list';
+  String get providerAddedToFavourite => 'Partner added to Favourite list';
 
   @override
   String get providerRemovedFromFavourite =>
-      'Provider removed from Favourite list';
+      'Partner removed from Favourite list';
 
   @override
   String get provideValidCurrentPasswordMessage =>
@@ -1436,13 +1436,13 @@ class LanguageEn extends BaseLanguage {
 
   @override
   String get serviceStatusPicMessage =>
-      'Please ensure you pick at least one Booking Status';
+      'Please ensure you pick at least one Request Status';
 
   @override
   String get clearFilter => 'Clear Filter';
 
   @override
-  String get bookingStatus => 'Booking Status';
+  String get bookingStatus => 'Request Status';
 
   @override
   String get addOns => 'Add-ons';
@@ -1500,10 +1500,10 @@ class LanguageEn extends BaseLanguage {
   String get coupons => 'Coupons';
 
   @override
-  String get handymanList => 'Handyman List';
+  String get handymanList => 'Employee List';
 
   @override
-  String get noHandymanFound => 'No Handyman Found';
+  String get noHandymanFound => 'No Employee Found';
 
   @override
   String get back => 'Back';
@@ -1512,20 +1512,20 @@ class LanguageEn extends BaseLanguage {
   String get team => 'Team';
 
   @override
-  String get whyChooseMeAs => 'Why Choose Me as Your Trusted Service Provider';
+  String get whyChooseMeAs => 'Why Choose Me as Your Trusted Service Partner';
 
   @override
   String get reason => 'Reason';
 
   @override
   String get pleaseEnterAddressAnd =>
-      'Please Enter Address and Booking Date & Slot';
+      'Please Enter Address and Request Date & Slot';
 
   @override
   String get pleaseEnterYourAddress => 'Please Enter Your Address';
 
   @override
-  String get pleaseSelectBookingDate => 'Please Select Booking Date & Slot';
+  String get pleaseSelectBookingDate => 'Please Select Request Date & Slot';
 
   @override
   String get doYouWantTo => 'Do you want to remove this coupon?';
@@ -1543,7 +1543,7 @@ class LanguageEn extends BaseLanguage {
   String get paymentSuccess => 'Payment Success';
 
   @override
-  String get redirectingToBookings => 'Redirecting to bookings..';
+  String get redirectingToBookings => 'Redirecting to requests..';
 
   @override
   String get transactionIsInProcess => 'Transaction is in process...';
@@ -1777,7 +1777,7 @@ class LanguageEn extends BaseLanguage {
   String get pushNotification => 'Push Notification';
 
   @override
-  String get yourBooking => 'Your Booking';
+  String get yourBooking => 'Your Request';
 
   @override
   String get featuredServices => 'Featured Services';
@@ -1790,7 +1790,7 @@ class LanguageEn extends BaseLanguage {
   String get newRequest => 'New Request';
 
   @override
-  String get upcomingBooking => 'Upcoming Booking';
+  String get upcomingBooking => 'Upcoming Request';
 
   @override
   String get theUserHasDenied =>
@@ -1813,16 +1813,16 @@ class LanguageEn extends BaseLanguage {
   String get canTFindYourServices => "Can't find your services?";
 
   @override
-  String get trackProviderLocation => 'Track Provider Location';
+  String get trackProviderLocation => 'Track Partner Location';
 
   @override
-  String get trackHandymanLocation => 'Track Handyman Location';
+  String get trackHandymanLocation => 'Track Employee Location';
 
   @override
-  String get handymanLocation => 'Handyman Location';
+  String get handymanLocation => 'Employee Location';
 
   @override
-  String get providerLocation => 'Provider Location';
+  String get providerLocation => 'Partner Location';
 
   @override
   String get lastUpdatedAt => 'Last updated at:';
@@ -1831,10 +1831,10 @@ class LanguageEn extends BaseLanguage {
   String get track => 'Track';
 
   @override
-  String get handymanReached => 'Handyman Reached? Click to start';
+  String get handymanReached => 'Employee Reached? Click to start';
 
   @override
-  String get providerReached => 'Provider Reached? Click to start';
+  String get providerReached => 'Partner Reached? Click to start';
 
   @override
   String get addBank => "Add bank";
@@ -1985,15 +1985,15 @@ class LanguageEn extends BaseLanguage {
   String get goBack => 'Go Back';
 
   @override
-  String get bookingCancelled => 'Booking Cancelled';
+  String get bookingCancelled => 'Request Cancelled';
 
   @override
   String get yourBookingHasBeen =>
-      'Your booking has been successfully canceled. Applicable refund will be processed within 24 hours';
+      'Your request has been successfully canceled. Applicable refund will be processed within 24 hours';
 
   @override
   String get noteCheckYourBooking =>
-      'Note: Check your booking history for refund details';
+      'Note: Check your request history for refund details';
 
   @override
   String get cancelledReason => 'Cancelled reason';
@@ -2126,10 +2126,10 @@ class LanguageEn extends BaseLanguage {
   String get selectStartDateEndDate => 'Select start date & end date';
 
   @override
-  String get handymanNotFound => 'Handyman Not Found';
+  String get handymanNotFound => 'Employee Not Found';
 
   @override
-  String get providerNotFound => 'Provider Not Found';
+  String get providerNotFound => 'Partner Not Found';
 
   @override
   String get rateYourExperience => 'Rate Your Experience';
@@ -2154,7 +2154,7 @@ class LanguageEn extends BaseLanguage {
   String get chooseYourDateRange => 'Choose your Date Range';
 
   @override
-  String get asHandyman => 'As Handyman';
+  String get asHandyman => 'As Employee';
 
   @override
   String get passwordLengthShouldBe =>
@@ -2208,21 +2208,21 @@ class LanguageEn extends BaseLanguage {
   @override
   String get chooseWithdrawalMethod => "Choose Withdrawal Method";
 
-  // Store & Product related implementations
+  // Service Hub & Service Item related implementations
   @override
-  String get store => "Store";
+  String get store => "Service Hub";
 
   @override
-  String get products => "Products";
+  String get products => "Service Items";
 
   @override
-  String get featuredProducts => "Featured Products";
+  String get featuredProducts => "Featured Service Items";
 
   @override
-  String get productCategories => "Product Categories";
+  String get productCategories => "Service Item Categories";
 
   @override
-  String get noProductsFound => "No Products Found";
+  String get noProductsFound => "No Service Items Found";
 
   @override
   String get addToCart => "Add to Cart";
@@ -2276,16 +2276,16 @@ class LanguageEn extends BaseLanguage {
   String get allCategories => "All Categories";
 
   @override
-  String get searchProducts => "Search Products";
+  String get searchProducts => "Search Service Items";
 
   @override
-  String get noStoreFound => "No Store Found";
+  String get noStoreFound => "No Service Hub Found";
 
   @override
-  String get storeInfo => "Store Info";
+  String get storeInfo => "Service Hub Info";
 
   @override
-  String get storeDetails => "Store Details";
+  String get storeDetails => "Service Hub Details";
 
   @override
   String get openingHours => "Opening Hours";
@@ -2297,43 +2297,43 @@ class LanguageEn extends BaseLanguage {
   String get workingDays => "Working Days";
 
   @override
-  String get storeAddress => "Store Address";
+  String get storeAddress => "Service Hub Address";
 
   @override
-  String get storePhone => "Store Phone";
+  String get storePhone => "Service Hub Phone";
 
   @override
-  String get storeEmail => "Store Email";
+  String get storeEmail => "Service Hub Email";
 
   @override
-  String get storeWebsite => "Store Website";
+  String get storeWebsite => "Service Hub Website";
 
   @override
-  String get storeOpen => "Store Open";
+  String get storeOpen => "Service Hub Open";
 
   @override
-  String get storeClosed => "Store Closed";
+  String get storeClosed => "Service Hub Closed";
 
   @override
-  String get viewProducts => "View Products";
+  String get viewProducts => "View Service Items";
 
   @override
-  String get productDetails => "Product Details";
+  String get productDetails => "Service Item Details";
 
   @override
-  String get productDescription => "Product Description";
+  String get productDescription => "Service Item Description";
 
   @override
-  String get productSpecifications => "Product Specifications";
+  String get productSpecifications => "Service Item Specifications";
 
   @override
-  String get productReviews => "Product Reviews";
+  String get productReviews => "Service Item Reviews";
 
   @override
-  String get relatedProducts => "Related Products";
+  String get relatedProducts => "Related Service Items";
 
   @override
-  String get productImages => "Product Images";
+  String get productImages => "Service Item Images";
 
   @override
   String get selectVariant => "Select Variant";
@@ -2345,7 +2345,7 @@ class LanguageEn extends BaseLanguage {
   String get totalPrice => "Total Price";
 
   @override
-  String get productNotAvailable => "Product Not Available";
+  String get productNotAvailable => "Service Item Not Available";
 
   @override
   String get invalidQuantity => "Invalid Quantity";
@@ -2355,4 +2355,11 @@ class LanguageEn extends BaseLanguage {
 
   @override
   String get minQuantityRequired => "Minimum Quantity Required";
+
+  @override
+  String get sanadOperations => "Sanad Operations";
+
+  @override
+  String get sanadCoordinatesPartnerExecution =>
+      "Sanad coordinates partner and employee execution internally.";
 }

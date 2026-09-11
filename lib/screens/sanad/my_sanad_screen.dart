@@ -1,4 +1,5 @@
 import 'package:booking_system_flutter/component/loader_widget.dart';
+import 'package:booking_system_flutter/main.dart';
 import 'package:booking_system_flutter/network/rest_apis.dart';
 import 'package:booking_system_flutter/utils/colors.dart';
 import 'package:booking_system_flutter/utils/common.dart';
@@ -70,23 +71,23 @@ class _MySanadScreenState extends State<MySanadScreen> {
 
   Future<void> sendChat() async {
     final requestId = firstRequestId;
-    if (requestId == null) return toast('No Sanad request found');
-    if (chatController.text.trim().isEmpty) return toast('Enter a message');
+    if (requestId == null) return toast(language.noSanadRequestFound);
+    if (chatController.text.trim().isEmpty) return toast(language.enterMessage);
 
     await sendSanadChatMessage({
       'booking_id': requestId,
       'message': chatController.text.trim(),
     });
     chatController.clear();
-    toast('Message sent');
+    toast(language.messageSent);
     await refresh();
   }
 
   Future<void> askAi() async {
-    if (aiController.text.trim().isEmpty) return toast('Enter a question');
-    final answer = await askSanadAi({'question': aiController.text.trim()});
+    if (aiController.text.trim().isEmpty) return toast(language.enterQuestion);
+    final answer = await askSanadAi(question: aiController.text.trim());
     setState(() {
-      aiAnswer = answer.answer;
+      aiAnswer = answer.answer ?? '';
     });
   }
 
@@ -94,7 +95,7 @@ class _MySanadScreenState extends State<MySanadScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: appBarWidget(
-        'My Sanad',
+        language.mySanad,
         textColor: Colors.white,
         color: context.primaryColor,
       ),
@@ -116,42 +117,46 @@ class _MySanadScreenState extends State<MySanadScreen> {
             child: AnimatedScrollView(
               padding: EdgeInsets.all(16),
               children: [
-                _sectionTitle('My Requests'),
+                _sectionTitle(language.sanadRequests),
                 ...requests.map((e) => _simpleTile(
-                    'Request #${e['id'] ?? '-'}',
-                    e['service_name'] ?? e['description'] ?? 'Sanad request',
+                    '${language.requestNumber} #${e['id'] ?? '-'}',
+                    e['service_name'] ??
+                        e['description'] ??
+                        language.sanadRequest,
                     e['sanad_stage'] ?? e['status'] ?? 'new')),
                 16.height,
-                _sectionTitle('Documents'),
+                _sectionTitle(language.documents),
                 ...documents.map((e) => _simpleTile(
-                    e['title'] ?? e['document_name'] ?? 'Document',
+                    e['title'] ?? e['document_name'] ?? language.document,
                     e['visibility'] ?? e['document_type'] ?? '',
                     e['status'] ?? 'available')),
                 16.height,
-                _sectionTitle('Updates'),
+                _sectionTitle(language.updates),
                 ...alerts.map((e) => _simpleTile(
-                    e['title'] ?? 'Buzz',
+                    e['title'] ?? language.buzz,
                     e['message'] ?? e['severity'] ?? '',
                     e['status'] ?? 'open')),
                 16.height,
-                _sectionTitle('Secure Chat'),
-                _textInput(chatController, 'Write a secure message'),
+                _sectionTitle(language.secureChat),
+                _textInput(chatController, language.writeSecureMessage),
                 AppButton(
-                  text: 'Send Message',
+                  text: language.sendMessage,
                   color: primaryColor,
                   textColor: Colors.white,
                   width: context.width(),
                   onTap: sendChat,
                 ),
                 ...chats.map((e) => _simpleTile(
-                    'Request #${e['booking_id'] ?? e['id'] ?? '-'}',
-                    e['last_message'] ?? e['message'] ?? 'Thread available',
+                    '${language.requestNumber} #${e['booking_id'] ?? e['id'] ?? '-'}',
+                    e['last_message'] ??
+                        e['message'] ??
+                        language.threadAvailable,
                     e['status'] ?? 'open')),
                 16.height,
-                _sectionTitle('AI Assistant'),
-                _textInput(aiController, 'Ask the Sanad assistant'),
+                _sectionTitle(language.aiAssistant),
+                _textInput(aiController, language.askSanadAssistant),
                 AppButton(
-                  text: 'Ask AI',
+                  text: language.askAi,
                   color: primaryColor,
                   textColor: Colors.white,
                   width: context.width(),

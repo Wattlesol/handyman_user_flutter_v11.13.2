@@ -28,6 +28,7 @@ import 'package:booking_system_flutter/screens/payment/payment_screen.dart';
 import 'package:booking_system_flutter/screens/review/components/review_widget.dart';
 import 'package:booking_system_flutter/screens/review/rating_view_all_screen.dart';
 import 'package:booking_system_flutter/screens/service/service_detail_screen.dart';
+import 'package:booking_system_flutter/screens/chat/user_chat_screen.dart';
 import 'package:booking_system_flutter/utils/booking_calculations_logic.dart';
 import 'package:booking_system_flutter/utils/colors.dart';
 import 'package:booking_system_flutter/utils/common.dart';
@@ -1247,8 +1248,7 @@ class _BookingDetailScreenState extends State<BookingDetailScreen>
         },
       );
     } else if (bookingResponse.bookingDetail!.status ==
-            BookingStatusKeys.pending ||
-        bookingResponse.bookingDetail!.status == BookingStatusKeys.accept) {
+            BookingStatusKeys.pending) {
       return AppButton(
         text: language.lblCancelBooking,
         textColor: Colors.white,
@@ -1259,6 +1259,16 @@ class _BookingDetailScreenState extends State<BookingDetailScreen>
               isDurationMode: checkTimeDifference(
                   inputDateTime: DateTime.parse(
                       bookingResponse.bookingDetail!.date.validate())));
+        },
+      );
+    } else if (bookingResponse.bookingDetail!.status ==
+        BookingStatusKeys.accept) {
+      return AppButton(
+        text: 'Request Cancellation via Support',
+        textColor: Colors.white,
+        color: const Color(0xFF0F2933),
+        onTap: () {
+          UserChatScreen(requestId: bookingResponse.bookingDetail!.id.validate()).launch(context);
         },
       );
     } else if (bookingResponse.bookingDetail!.status ==

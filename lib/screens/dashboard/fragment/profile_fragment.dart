@@ -231,7 +231,7 @@ class ProfileFragmentState extends State<ProfileFragment> {
                             leading: Icon(Icons.assignment_outlined,
                                 size: SETTING_ICON_SIZE,
                                 color: context.iconColor),
-                            title: 'My Sanad',
+                            title: language.mySanad,
                             titleTextStyle: boldTextStyle(size: 12),
                             padding:
                                 EdgeInsets.only(top: 20, left: 16, right: 16),

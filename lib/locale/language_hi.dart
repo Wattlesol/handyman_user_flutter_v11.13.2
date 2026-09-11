@@ -2416,9 +2416,9 @@ class LanguageHi extends BaseLanguage {
   String get workingDays => throw UnimplementedError();
 
   @override
-  String get sanadOperations => "Sanad Operations";
+  String get sanadOperations => "Quick Operations";
 
   @override
   String get sanadCoordinatesPartnerExecution =>
-      "Sanad coordinates partner and employee execution internally.";
+      "Quick coordinates partner and employee execution internally.";
 }

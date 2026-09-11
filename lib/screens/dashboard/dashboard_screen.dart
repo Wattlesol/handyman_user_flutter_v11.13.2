@@ -6,7 +6,6 @@ import 'package:booking_system_flutter/screens/chat/chat_list_screen.dart';
 import 'package:booking_system_flutter/screens/dashboard/fragment/booking_fragment.dart';
 import 'package:booking_system_flutter/screens/dashboard/fragment/dashboard_fragment.dart';
 import 'package:booking_system_flutter/screens/dashboard/fragment/profile_fragment.dart';
-import 'package:booking_system_flutter/screens/store/store_screen.dart';
 import 'package:booking_system_flutter/utils/colors.dart';
 import 'package:booking_system_flutter/utils/common.dart';
 import 'package:booking_system_flutter/utils/constant.dart';
@@ -26,6 +25,7 @@ import '../newDashboard/dashboard_1/dashboard_fragment_1.dart';
 import '../newDashboard/dashboard_2/dashboard_fragment_2.dart';
 import '../newDashboard/dashboard_3/dashboard_fragment_3.dart';
 import '../newDashboard/dashboard_4/dashboard_fragment_4.dart';
+import '../service/package/package_list_screen.dart';
 
 class DashboardScreen extends StatefulWidget {
   final bool? redirectToBooking;
@@ -65,7 +65,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
     /// Handle Firebase Notification click and redirect to that Service & BookDetail screen
     LiveStream().on(LIVESTREAM_FIREBASE, (value) {
       if (value == 3) {
-        currentIndex = 3;
+        currentIndex = 4;
         setState(() {});
       }
     });
@@ -167,11 +167,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     ? BookingFragment()
                     : SignInScreen(isFromDashboard: true)),
             CategoryScreen(),
-            StoreScreen(),
-            Observer(
-                builder: (context) => appStore.isLoggedIn
-                    ? ChatListScreen()
-                    : SignInScreen(isFromDashboard: true)),
+            const PackageListScreen(),
+            ChatListScreen(),
             ProfileFragment(),
           ][currentIndex],
         ),
@@ -208,9 +205,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   label: language.category,
                 ),
                 NavigationDestination(
-                  icon: ic_store.iconImage(color: appTextSecondaryColor),
-                  selectedIcon: ic_store.iconImage(color: context.primaryColor),
-                  label: language.store,
+                  icon: const Icon(Icons.inventory_2_outlined, color: appTextSecondaryColor, size: 22),
+                  selectedIcon: Icon(Icons.inventory_2, color: context.primaryColor, size: 22),
+                  label: language.package,
                 ),
                 NavigationDestination(
                   icon: ic_chat.iconImage(color: appTextSecondaryColor),

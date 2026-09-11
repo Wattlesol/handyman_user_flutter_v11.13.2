@@ -23,7 +23,7 @@ class ServiceListComponent extends StatelessWidget {
           label: language.service,
           list: serviceList,
           onTap: () {
-            ViewAllServiceScreen().launch(context);
+            ViewAllServiceScreen(serviceList: serviceList).launch(context);
           },
         ).paddingSymmetric(horizontal: 16),
         8.height,

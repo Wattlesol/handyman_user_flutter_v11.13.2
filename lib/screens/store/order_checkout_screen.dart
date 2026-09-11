@@ -9,6 +9,7 @@ import 'package:booking_system_flutter/screens/auth/sign_in_screen.dart';
 import 'package:booking_system_flutter/screens/store/order_success_screen.dart';
 import 'package:booking_system_flutter/utils/colors.dart';
 import 'package:booking_system_flutter/utils/common.dart';
+import 'package:booking_system_flutter/utils/configs.dart';
 
 class OrderCheckoutScreen extends StatefulWidget {
   final ProductData product;
@@ -237,7 +238,7 @@ class _OrderCheckoutScreenState extends State<OrderCheckoutScreen> {
                   borderRadius: BorderRadius.circular(8),
                   child: Image.network(
                     widget.product.images?.first ??
-                        'http://127.0.0.1:8000/images/default.png',
+                        '$DOMAIN_URL/images/default.png',
                     fit: BoxFit.cover,
                     errorBuilder: (context, error, stackTrace) {
                       return Icon(Icons.image, color: context.iconColor);

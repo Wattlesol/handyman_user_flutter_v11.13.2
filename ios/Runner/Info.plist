@@ -7,7 +7,7 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleDisplayName</key>
-	<string>Sanad</string>
+	<string>Quick</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
@@ -15,7 +15,7 @@
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleName</key>
-	<string>Sanad</string>
+	<string>Quick</string>
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
@@ -57,27 +57,29 @@
 	<true/>
 	<key>NSAppTransportSecurity</key>
 	<dict>
+		<key>NSAllowsArbitraryLoads</key>
+		<true/>
 		<key>NSAllowsLocalNetworking</key>
 		<true/>
 	</dict>
 	<key>NSAppleMusicUsageDescription</key>
-	<string>Sanad requires access to Apple Music in order to enhance your music experience within the app.</string>
+	<string>Quick requires access to Apple Music in order to enhance your music experience within the app.</string>
 	<key>NSCameraUsageDescription</key>
-	<string>Sanad requires access to your device's camera to allow you to upload your profile photo.</string>
+	<string>Quick requires access to your device's camera to allow you to upload your profile photo.</string>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-	<string>Sanad requires access to your device's location to provide accurate service availability based on your current address.</string>
+	<string>Quick requires access to your device's location to provide accurate service availability based on your current address.</string>
 	<key>NSLocationAlwaysUsageDescription</key>
-	<string>Sanad requires access to your location to provide location-based services.</string>
+	<string>Quick requires access to your location to provide location-based services.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>Sanad needs access to your device's location to support service request delivery when required.</string>
+	<string>Quick needs access to your device's location to support service request delivery when required.</string>
 	<key>NSMicrophoneUsageDescription</key>
-	<string>Sanad requires access to your device's microphone when recording your speech using the "Mic" button.</string>
+	<string>Quick requires access to your device's microphone when recording your speech using the "Mic" button.</string>
 	<key>NSSpeechRecognitionUsageDescription</key>
-    <string>Sanad requires access to speech recognition when you use voice input.</string>
+    <string>Quick requires access to speech recognition when you use voice input.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>Sanad requires access to your device's photo library to enable you to upload your profile photo.</string>
+	<string>Quick requires access to your device's photo library to enable you to upload your profile photo.</string>
 	<key>Privacy-Location Usage Description</key>
-	<string>Sanad requires access to your device's location to support service availability based on your current location.</string>
+	<string>Quick requires access to your device's location to support service availability based on your current location.</string>
 	<key>SKAdNetworkItems</key>
 	<array>
 		<dict>

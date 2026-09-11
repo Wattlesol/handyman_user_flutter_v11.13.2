@@ -18,6 +18,7 @@ import '../../../component/loader_widget.dart';
 import '../component/booking_confirmed_component.dart';
 import '../component/new_job_request_component.dart';
 import '../component/promotional_banner_slider_component.dart';
+import '../../service/package/package_list_screen.dart';
 
 class DashboardFragment extends StatefulWidget {
   @override
@@ -151,6 +152,70 @@ class _DashboardFragmentState extends State<DashboardFragment> {
                     16.height,
                     FeaturedServiceListComponent(
                         serviceList: snap.featuredServices.validate()),
+                    16.height,
+                    // Special Service Bundles Banner
+                    Container(
+                      width: context.width(),
+                      margin: const EdgeInsets.symmetric(horizontal: 16),
+                      padding: const EdgeInsets.all(16),
+                      decoration: BoxDecoration(
+                        gradient: const LinearGradient(
+                          colors: [Color(0xFF1F6BFF), Color(0xFF0F2933)],
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight,
+                        ),
+                        borderRadius: BorderRadius.circular(14),
+                        boxShadow: [
+                          BoxShadow(
+                            color: const Color(0xFF1F6BFF).withValues(alpha: 0.25),
+                            blurRadius: 10,
+                            offset: const Offset(0, 4),
+                          ),
+                        ],
+                      ),
+                      child: Row(
+                        children: [
+                          Container(
+                            padding: const EdgeInsets.all(10),
+                            decoration: BoxDecoration(
+                              color: Colors.white.withValues(alpha: 0.15),
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            child: const Icon(Icons.inventory_2_outlined, color: Colors.white, size: 26),
+                          ),
+                          14.width,
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  "Service Bundles & Packages",
+                                  style: boldTextStyle(size: 15, color: Colors.white),
+                                ),
+                                3.height,
+                                Text(
+                                  "Save more with combined service packages",
+                                  style: secondaryTextStyle(size: 11, color: Colors.white.withValues(alpha: 0.85)),
+                                ),
+                              ],
+                            ),
+                          ),
+                          Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            child: Text(
+                              "View All",
+                              style: boldTextStyle(size: 11, color: const Color(0xFF1F6BFF)),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ).onTap(() {
+                      const PackageListScreen().launch(context);
+                    }),
                     16.height,
                     FeaturedProductListComponent(productList: featuredProducts),
                     ServiceListComponent(serviceList: snap.service.validate()),

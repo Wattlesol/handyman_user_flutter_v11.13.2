@@ -14,6 +14,8 @@ import 'package:nb_utils/nb_utils.dart';
 import '../../component/empty_error_state_widget.dart';
 import '../../utils/constant.dart';
 import '../service/view_all_service_screen.dart';
+import 'sub_category_screen.dart';
+import '../service/package/package_list_screen.dart';
 
 class CategoryScreen extends StatefulWidget {
   @override
@@ -107,6 +109,52 @@ class _CategoryScreenState extends State<CategoryScreen> {
                   }
                 },
                 children: [
+                  // Service Bundles Card Banner
+                  Container(
+                    width: context.width(),
+                    margin: const EdgeInsets.only(bottom: 16),
+                    padding: const EdgeInsets.all(14),
+                    decoration: BoxDecoration(
+                      gradient: const LinearGradient(
+                        colors: [Color(0xFF1F6BFF), Color(0xFF0F2933)],
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                      ),
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: Row(
+                      children: [
+                        Container(
+                          padding: const EdgeInsets.all(8),
+                          decoration: BoxDecoration(
+                            color: Colors.white.withValues(alpha: 0.15),
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: const Icon(Icons.inventory_2_outlined, color: Colors.white, size: 24),
+                        ),
+                        12.width,
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                "Service Bundles & Packages",
+                                style: boldTextStyle(size: 14, color: Colors.white),
+                              ),
+                              2.height,
+                              Text(
+                                "Combined services with special discounts",
+                                style: secondaryTextStyle(size: 11, color: Colors.white.withValues(alpha: 0.85)),
+                              ),
+                            ],
+                          ),
+                        ),
+                        const Icon(Icons.arrow_forward_ios, color: Colors.white, size: 14),
+                      ],
+                    ),
+                  ).onTap(() {
+                    const PackageListScreen().launch(context);
+                  }),
                   AnimatedWrap(
                     key: key,
                     runSpacing: 16,
@@ -122,15 +170,11 @@ class _CategoryScreenState extends State<CategoryScreen> {
 
                       return GestureDetector(
                         onTap: () {
-                          ViewAllServiceScreen(
-                                  categoryId: data.id.validate(),
-                                  categoryName: data.name,
-                                  isFromCategory: true)
-                              .launch(context);
+                          SubCategoryScreen(categoryData: data).launch(context);
                         },
                         child: CategoryWidget(
                             categoryData: data,
-                            width: context.width() / 4 - 20),
+                            width: context.width() / 3 - 18),
                       );
                     },
                   ).center(),

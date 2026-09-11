@@ -1,436 +1,487 @@
 import 'dart:async';
-import 'dart:io';
-
-import 'package:booking_system_flutter/component/loader_widget.dart';
-import 'package:booking_system_flutter/main.dart';
-import 'package:booking_system_flutter/model/chat_message_model.dart';
-import 'package:booking_system_flutter/model/user_data_model.dart';
-import 'package:booking_system_flutter/screens/chat/widget/chat_item_widget.dart';
-import 'package:booking_system_flutter/services/notification_services.dart';
-import 'package:booking_system_flutter/utils/colors.dart';
-import 'package:booking_system_flutter/utils/common.dart';
-import 'package:booking_system_flutter/utils/constant.dart';
-import 'package:booking_system_flutter/utils/string_extensions.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:file_picker/file_picker.dart';
-import 'package:firebase_pagination/firebase_pagination.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:nb_utils/nb_utils.dart';
 
-import '../../component/cached_image_widget.dart';
-import '../../component/empty_error_state_widget.dart';
-import '../../services/chat_services.dart';
-import '../../utils/configs.dart';
-import '../../utils/getImage.dart';
-import '../../utils/images.dart';
-import 'send_file_screen.dart';
+import '../../component/base_scaffold_widget.dart';
+import '../../component/loader_widget.dart';
+import '../../main.dart';
+import '../../model/sanad_chat_model.dart';
+import '../../model/user_data_model.dart';
+import '../../network/rest_apis.dart';
+import '../../utils/colors.dart';
+import '../../utils/common.dart';
+import '../booking/booking_detail_screen.dart';
+import '../booking/sanad_request_detail_screen.dart';
+import 'widget/sanad_buzz_alert_card_widget.dart';
+import 'widget/sanad_chat_bubble_widget.dart';
+import 'widget/sanad_document_request_card_widget.dart';
 
 class UserChatScreen extends StatefulWidget {
-  final UserData receiverUser;
+  final SanadConversationItem? conversation;
+  final int? requestId;
+  final UserData? receiverUser;
   final bool isChattingAllow;
 
-  UserChatScreen({required this.receiverUser, this.isChattingAllow = false});
+  const UserChatScreen({
+    Key? key,
+    this.conversation,
+    this.requestId,
+    this.receiverUser,
+    this.isChattingAllow = true,
+  }) : super(key: key);
 
   @override
   _UserChatScreenState createState() => _UserChatScreenState();
 }
 
-class _UserChatScreenState extends State<UserChatScreen> with WidgetsBindingObserver {
-  TextEditingController messageCont = TextEditingController();
+class _UserChatScreenState extends State<UserChatScreen> {
+  final TextEditingController messageCont = TextEditingController();
+  final ScrollController scrollController = ScrollController();
+  final FocusNode messageFocus = FocusNode();
 
-  FocusNode messageFocus = FocusNode();
+  List<SanadChatMessageModel> messages = [];
+  List<SanadDocumentRequestModel> documentRequests = [];
+  List<SanadBuzzAlertModel> buzzAlerts = [];
 
-  UserData senderUser = UserData();
+  bool isLoading = true;
+  bool isSending = false;
+  bool isAiMode = false;
+  Timer? _pollingTimer;
 
-  StreamSubscription? _streamSubscription;
+  int get effectiveRequestId =>
+      widget.conversation?.id ?? widget.requestId ?? (widget.receiverUser?.id ?? 0);
 
-  int isReceiverOnline = 0;
+  String get requestReference =>
+      widget.conversation?.sanadReference ?? 'QUICK-${effectiveRequestId.toString().padLeft(6, '0')}';
 
-  bool get isReceiverUserOnline => isReceiverOnline == 1;
+  String get serviceTitle =>
+      widget.conversation?.serviceName ?? widget.receiverUser?.displayName ?? 'Service Request';
+
+  String get stageTitle =>
+      widget.conversation?.sanadStage?.replaceAll('_', ' ').capitalizeFirstLetter() ?? 'Submitted';
 
   @override
   void initState() {
     super.initState();
-    init();
-  }
-
-  void init() async {
-    WidgetsBinding.instance.addObserver(this);
-
-    //OneSignal.shared.disablePush(true);
-
-    if (widget.receiverUser.uid.validate().isEmpty) {
-      await userService.getUser(email: widget.receiverUser.email.validate()).then((value) {
-        widget.receiverUser.uid = value.uid;
-      }).catchError((e) {
-        log(e.toString());
-      });
-    }
-
-    senderUser = await userService.getUser(email: appStore.userEmail.validate());
-    appStore.setLoading(false);
-    setState(() {});
-
-    if (await userService.isReceiverInContacts(senderUserId: appStore.uid.validate(), receiverUserId: widget.receiverUser.uid.validate())) {
-      await chatServices.setUnReadStatusToTrue(senderId: appStore.uid.validate(), receiverId: widget.receiverUser.uid.validate()).catchError((e) {
-        toast(e.toString());
-      });
-
-      log("receiver ID ${widget.receiverUser.uid}");
-      chatServices.setOnlineCount(senderId: widget.receiverUser.uid.validate(), receiverId: appStore.uid.validate(), status: 1);
-      //
-      _streamSubscription = chatServices.isReceiverOnline(senderId: appStore.uid.validate(), receiverUserId: widget.receiverUser.uid.validate()).listen((event) {
-        isReceiverOnline = event.isOnline.validate();
-        log("=======*=======*=======*=======*=======* User $isReceiverOnline =======*=======*=======*=======*=======");
-      });
-    }
-  }
-
-  //region Widget
-  Widget _buildChatFieldWidget() {
-    return Row(
-      children: [
-        AppTextField(
-          textFieldType: TextFieldType.OTHER,
-          controller: messageCont,
-          textStyle: primaryTextStyle(),
-          minLines: 1,
-          onFieldSubmitted: (s) {
-            sendMessages();
-          },
-          focus: messageFocus,
-          cursorHeight: 20,
-          maxLines: 5,
-          cursorColor: appStore.isDarkMode ? Colors.white : Colors.black,
-          textCapitalization: TextCapitalization.sentences,
-          keyboardType: TextInputType.multiline,
-          suffix: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              IconButton(
-                icon: Transform.rotate(angle: -0.75, child: Icon(Icons.attach_file_outlined)),
-                onPressed: () {
-                  if (!appStore.isLoading) {
-                    _handleDocumentClick();
-                  }
-                },
-              ),
-              IconButton(
-                icon: Icon(Icons.camera_alt_outlined),
-                onPressed: () {
-                  if (!appStore.isLoading) {
-                    _handleCameraClick();
-                  }
-                },
-              ),
-            ],
-          ),
-          decoration: inputDecoration(context).copyWith(hintText: language.message, hintStyle: secondaryTextStyle()),
-        ).expand(),
-        8.width,
-        Container(
-          decoration: boxDecorationDefault(borderRadius: radius(80), color: primaryColor),
-          child: IconButton(
-            icon: Icon(Icons.send, color: Colors.white),
-            onPressed: () {
-              sendMessages();
-            },
-          ),
-        )
-      ],
-    );
-  }
-
-  //endregion
-
-  //region Methods
-  Future<void> sendMessages({
-    bool isFile = false,
-    List<String> attachmentFiles = const [],
-  }) async {
-    if (appStore.isLoading) return;
-    // If Message TextField is Empty.
-    if (messageCont.text.trim().isEmpty && !isFile) {
-      messageFocus.requestFocus();
-      return;
-    } else if (isFile && attachmentFiles.isEmpty) {
-      return;
-    }
-
-    // Making Request for sending data to firebase
-    ChatMessageModel data = ChatMessageModel();
-
-    data.receiverId = widget.receiverUser.uid;
-    data.senderId = appStore.uid;
-    data.message = messageCont.text;
-    data.isMessageRead = isReceiverOnline == 1;
-    data.createdAt = DateTime.now().millisecondsSinceEpoch;
-    data.createdAtTime = Timestamp.now();
-    data.updatedAtTime = Timestamp.now();
-    data.messageType = isFile ? MessageType.Files.name : MessageType.TEXT.name;
-    data.attachmentfiles = attachmentFiles;
-    log('ChatMessageModel Data : ${data.toJson()}');
-    messageCont.clear();
-
-    if (!(await userService.isReceiverInContacts(senderUserId: appStore.uid.validate(), receiverUserId: widget.receiverUser.uid.validate()))) {
-      log("========Adding To Contacts=========");
-      await chatServices.addToContacts(
-        senderId: data.senderId,
-        receiverId: data.receiverId,
-        receiverName: widget.receiverUser.displayName.validate(),
-        senderName: senderUser.displayName.validate(),
-      );
-      _streamSubscription = chatServices.isReceiverOnline(senderId: appStore.uid.validate(), receiverUserId: widget.receiverUser.uid.validate()).listen((event) {
-        isReceiverOnline = event.isOnline.validate();
-        log("=======*=======*=======*=======*=======* User $isReceiverOnline =======*=======*=======*=======*=======");
-      });
-    }
-    log('-------addMessage----');
-    await chatServices.addMessage(data).then((value) async {
-      log("--Message Successfully Added--");
-      // todo : remove this
-      isReceiverOnline = 0;
-      if (isReceiverOnline != 1) {
-        /// Send Notification
-        NotificationService()
-            .sendPushNotifications(
-          appStore.userFullName,
-          data.message.validate(),
-          image: data.attachmentfiles == null || data.attachmentfiles!.isEmpty ? null : data.attachmentfiles!.first,
-          receiverUser: widget.receiverUser,
-          senderUserData: senderUser,
-        )
-            .catchError((e) {
-          log("Notification Error ${e.toString()}");
-        });
+    fetchCommunication();
+    // Auto-poll for new messages every 6 seconds while screen is open
+    _pollingTimer = Timer.periodic(const Duration(seconds: 6), (_) {
+      if (mounted && !isSending) {
+        fetchCommunication(silent: true);
       }
-
-      /// Save receiverId to Sender Doc.
-      userService.saveToContacts(senderId: appStore.uid, receiverId: widget.receiverUser.uid.validate()).then((value) => log("---ReceiverId to Sender Doc.---")).catchError((e) {
-        log(e.toString());
-      });
-
-      /// Save senderId to Receiver Doc.
-      userService.saveToContacts(senderId: widget.receiverUser.uid.validate(), receiverId: appStore.uid).then((value) => log("---SenderId to Receiver Doc.---")).catchError((e) {
-        log(e.toString());
-      });
-
-      /// ENd
-    }).catchError((e) {
-      log(e.toString());
     });
-  }
-
-  //endregion
-
-  @override
-  void didChangeAppLifecycleState(AppLifecycleState state) async {
-    super.didChangeAppLifecycleState(state);
-
-    if (state == AppLifecycleState.detached) {
-      chatServices.setOnlineCount(senderId: widget.receiverUser.uid.validate(), receiverId: appStore.uid.validate(), status: 0);
-    }
-
-    if (state == AppLifecycleState.paused) {
-      chatServices.setOnlineCount(senderId: widget.receiverUser.uid.validate(), receiverId: appStore.uid.validate(), status: 0);
-    }
-    if (state == AppLifecycleState.resumed) {
-      chatServices.setOnlineCount(senderId: widget.receiverUser.uid.validate(), receiverId: appStore.uid.validate(), status: 1);
-    }
-  }
-
-  @override
-  void setState(fn) {
-    if (mounted) super.setState(fn);
   }
 
   @override
   void dispose() {
-    WidgetsBinding.instance.removeObserver(this);
-
-    chatServices.setOnlineCount(senderId: widget.receiverUser.uid.validate(), receiverId: appStore.uid.validate(), status: 0);
-
-    _streamSubscription?.cancel();
-
-    setStatusBarColor(transparentColor, statusBarBrightness: Brightness.dark, statusBarIconBrightness: Brightness.dark);
-
+    _pollingTimer?.cancel();
+    messageCont.dispose();
+    scrollController.dispose();
+    messageFocus.dispose();
     super.dispose();
+  }
+
+  Future<void> fetchCommunication({bool silent = false}) async {
+    if (effectiveRequestId == 0) {
+      if (mounted) setState(() => isLoading = false);
+      return;
+    }
+
+    if (!silent) {
+      setState(() => isLoading = true);
+    }
+
+    try {
+      final res = await getRequestCommunication(effectiveRequestId);
+      if (mounted) {
+        List<SanadChatMessageModel> allMsgs = [];
+        int? threadId;
+
+        for (var t in res.threads) {
+          threadId ??= t.id;
+          allMsgs.addAll(t.messages);
+        }
+
+        // Sort messages chronologically
+        allMsgs.sort((a, b) {
+          if (a.createdAt == null || b.createdAt == null) return 0;
+          return a.createdAt!.compareTo(b.createdAt!);
+        });
+
+        setState(() {
+          messages = allMsgs;
+          documentRequests = res.documentRequests;
+          isLoading = false;
+        });
+
+        // Mark read
+        if (threadId != null) {
+          markRequestCommunicationRead(requestId: effectiveRequestId, threadId: threadId);
+        }
+
+        // Auto-scroll to bottom on first load
+        if (!silent) {
+          _scrollToBottom();
+        }
+      }
+    } catch (e) {
+      if (mounted) {
+        setState(() => isLoading = false);
+        if (!silent) {
+          toast(e.toString());
+        }
+      }
+    }
+  }
+
+  void _scrollToBottom() {
+    afterBuildCreated(() {
+      if (scrollController.hasClients) {
+        scrollController.animateTo(
+          scrollController.position.maxScrollExtent + 120,
+          duration: const Duration(milliseconds: 250),
+          curve: Curves.easeOut,
+        );
+      }
+    });
+  }
+
+  Future<void> handleSendMessage() async {
+    final text = messageCont.text.trim();
+    if (text.isEmpty || isSending) return;
+
+    messageCont.clear();
+    setState(() => isSending = true);
+
+    if (isAiMode) {
+      // AI query
+      final tempUserMsg = SanadChatMessageModel(
+        senderRole: 'customer',
+        message: text,
+        createdAt: DateTime.now().toIso8601String(),
+      );
+      setState(() {
+        messages.add(tempUserMsg);
+      });
+      _scrollToBottom();
+
+      try {
+        final aiRes = await askSanadAi(question: text, requestId: effectiveRequestId);
+        if (mounted) {
+          final aiMsg = SanadChatMessageModel(
+            senderRole: 'ai',
+            senderName: 'AI First Responder',
+            message: aiRes.answer ?? 'No answer provided',
+            createdAt: DateTime.now().toIso8601String(),
+            aiInteractionId: aiRes.id,
+          );
+          setState(() {
+            messages.add(aiMsg);
+            isSending = false;
+          });
+          _scrollToBottom();
+        }
+      } catch (e) {
+        if (mounted) {
+          setState(() => isSending = false);
+          toast(e.toString());
+        }
+      }
+    } else {
+      // Regular message to request team
+      try {
+        final newMsg = await sendRequestCommunicationMessage(
+          requestId: effectiveRequestId,
+          message: text,
+        );
+        if (mounted) {
+          setState(() {
+            messages.add(newMsg);
+            isSending = false;
+          });
+          _scrollToBottom();
+        }
+      } catch (e) {
+        if (mounted) {
+          setState(() => isSending = false);
+          toast(e.toString());
+        }
+      }
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () => hideKeyboard(context),
-      child: Scaffold(
-        appBar: AppBar(
-          backgroundColor: context.primaryColor,
-          leadingWidth: context.width(),
-          systemOverlayStyle: SystemUiOverlayStyle(statusBarColor: context.primaryColor, statusBarBrightness: Brightness.dark, statusBarIconBrightness: Brightness.light),
-          leading: Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              IconButton(
-                padding: EdgeInsets.symmetric(horizontal: 8),
-                onPressed: () {
-                  finish(context);
-                },
-                icon: ic_arrow_left.iconImage(color: Colors.white),
+    return AppScaffold(
+      appBarTitle: requestReference,
+      actions: [
+        // Shortcut to view full Request / Booking Details
+        if (effectiveRequestId > 0)
+          TextButton.icon(
+            onPressed: () {
+              SanadRequestDetailScreen(requestId: effectiveRequestId).launch(context);
+            },
+            icon: const Icon(Icons.assignment_outlined, size: 16, color: brandBlueLight),
+            label: Text(
+              'Request',
+              style: boldTextStyle(size: 13, color: brandBlueLight),
+            ),
+          ).paddingRight(8),
+      ],
+      child: Column(
+        children: [
+          // Room Header Banner
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+            decoration: BoxDecoration(
+              color: context.cardColor,
+              border: Border(
+                bottom: BorderSide(color: context.dividerColor, width: 1),
               ),
-              CachedImageWidget(url: widget.receiverUser.profileImage.validate(), height: 36, circle: true, fit: BoxFit.cover),
-              12.width,
-              Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.start,
+            ),
+            child: Row(
+              children: [
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        serviceTitle,
+                        style: boldTextStyle(size: 15),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      3.height,
+                      Row(
+                        children: [
+                          Text(
+                            requestReference,
+                            style: secondaryTextStyle(size: 12, color: brandBlueLight),
+                          ),
+                          8.width,
+                          Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 1.5),
+                            decoration: BoxDecoration(
+                              color: brandBlueLight.withOpacity(0.1),
+                              borderRadius: BorderRadius.circular(4),
+                            ),
+                            child: Text(
+                              stageTitle,
+                              style: boldTextStyle(size: 10, color: brandBlueLight),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+
+          // Main Timeline Stream
+          Expanded(
+            child: isLoading
+                ? LoaderWidget().center()
+                : RefreshIndicator(
+                    onRefresh: () => fetchCommunication(silent: false),
+                    child: ListView(
+                      controller: scrollController,
+                      padding: const EdgeInsets.symmetric(vertical: 12),
+                      children: [
+                        // Pending Document Requests Cards at top of chat
+                        if (documentRequests.isNotEmpty) ...[
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+                            child: Text(
+                              'Action Required Documents',
+                              style: boldTextStyle(size: 12, color: appTextSecondaryColor),
+                            ),
+                          ),
+                          ...documentRequests.map(
+                            (docReq) => SanadDocumentRequestCardWidget(
+                              docRequest: docReq,
+                              onUploadTap: () {
+                                toast('Please attach document in the composer below.');
+                              },
+                            ),
+                          ),
+                          const Divider(height: 24, thickness: 1).paddingSymmetric(horizontal: 16),
+                        ],
+
+                        // Urgent Buzz Alerts
+                        ...buzzAlerts.map(
+                          (buzz) => SanadBuzzAlertCardWidget(
+                            buzzAlert: buzz,
+                            onAcknowledged: () => fetchCommunication(silent: true),
+                          ),
+                        ),
+
+                        // Message Stream
+                        if (messages.isEmpty && documentRequests.isEmpty)
+                          Container(
+                            padding: const EdgeInsets.symmetric(vertical: 48, horizontal: 24),
+                            child: Column(
+                              children: [
+                                Icon(Icons.chat_bubble_outline, size: 48, color: appTextSecondaryColor.withOpacity(0.4)),
+                                12.height,
+                                Text(
+                                  'No messages yet in this request.',
+                                  style: boldTextStyle(size: 14),
+                                ),
+                                4.height,
+                                Text(
+                                  'Send a message or ask AI to start the conversation with the operations team.',
+                                  style: secondaryTextStyle(size: 12),
+                                  textAlign: TextAlign.center,
+                                ),
+                              ],
+                            ),
+                          )
+                        else
+                          ...messages.map((msg) {
+                            if (msg.messageType == 'buzz' && msg.buzzAlert != null) {
+                              return SanadBuzzAlertCardWidget(
+                                buzzAlert: msg.buzzAlert!,
+                                onAcknowledged: () => fetchCommunication(silent: true),
+                              );
+                            }
+                            if (msg.messageType == 'document_request' && msg.documentRequest != null) {
+                              return SanadDocumentRequestCardWidget(
+                                docRequest: msg.documentRequest!,
+                              );
+                            }
+                            return SanadChatBubbleWidget(message: msg);
+                          }),
+                      ],
+                    ),
+                  ),
+          ),
+
+          // AI Mode Toggle Pill
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
+            color: isAiMode ? Colors.purple.withOpacity(0.06) : Colors.transparent,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Row(
+                  children: [
+                    Icon(
+                      Icons.auto_awesome,
+                      size: 16,
+                      color: isAiMode ? Colors.purple : appTextSecondaryColor,
+                    ),
+                    6.width,
+                    Text(
+                      isAiMode ? 'AI First Responder Active' : 'Team Chat Mode',
+                      style: boldTextStyle(
+                        size: 12,
+                        color: isAiMode ? Colors.purple : appTextSecondaryColor,
+                      ),
+                    ),
+                  ],
+                ),
+                GestureDetector(
+                  onTap: () {
+                    setState(() => isAiMode = !isAiMode);
+                  },
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                    decoration: BoxDecoration(
+                      color: isAiMode ? Colors.purple : Colors.grey.withOpacity(0.2),
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: Text(
+                      isAiMode ? 'Switch to Staff' : 'Ask AI',
+                      style: boldTextStyle(size: 11, color: isAiMode ? Colors.white : appTextPrimaryColor),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+
+          // Message Composer
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+            decoration: BoxDecoration(
+              color: context.cardColor,
+              border: Border(
+                top: BorderSide(color: context.dividerColor, width: 1),
+              ),
+            ),
+            child: SafeArea(
+              top: false,
+              child: Row(
                 children: [
-                  Text(
-                    "${widget.receiverUser.firstName.validate() + " " + widget.receiverUser.lastName.validate()}",
-                    style: boldTextStyle(color: white, size: APP_BAR_TEXT_SIZE),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
+                  // Attachment Icon
+                  IconButton(
+                    icon: const Icon(Icons.attach_file, color: appTextSecondaryColor),
+                    onPressed: () {
+                      toast('Document attachment option');
+                    },
+                  ),
+
+                  // Message Input
+                  Expanded(
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 14),
+                      decoration: BoxDecoration(
+                        color: context.scaffoldBackgroundColor,
+                        borderRadius: BorderRadius.circular(24),
+                        border: Border.all(
+                          color: isAiMode ? Colors.purple.withOpacity(0.4) : context.dividerColor,
+                        ),
+                      ),
+                      child: TextField(
+                        controller: messageCont,
+                        focusNode: messageFocus,
+                        minLines: 1,
+                        maxLines: 4,
+                        decoration: InputDecoration(
+                          hintText: isAiMode ? 'Ask AI about this request...' : 'Type a message...',
+                          hintStyle: secondaryTextStyle(size: 13),
+                          border: InputBorder.none,
+                          isDense: true,
+                          contentPadding: const EdgeInsets.symmetric(vertical: 10),
+                        ),
+                        onSubmitted: (_) => handleSendMessage(),
+                      ),
+                    ),
+                  ),
+                  8.width,
+
+                  // Send Button
+                  Container(
+                    width: 42,
+                    height: 42,
+                    decoration: BoxDecoration(
+                      color: isAiMode ? Colors.purple : brandBlueLight,
+                      shape: BoxShape.circle,
+                    ),
+                    child: isSending
+                        ? const Center(
+                            child: SizedBox(
+                              width: 18,
+                              height: 18,
+                              child: CircularProgressIndicator(
+                                strokeWidth: 2,
+                                color: Colors.white,
+                              ),
+                            ),
+                          )
+                        : IconButton(
+                            icon: const Icon(Icons.send, color: Colors.white, size: 18),
+                            onPressed: handleSendMessage,
+                          ),
                   ),
                 ],
-              ).expand(),
-              40.width,
-            ],
-          ),
-          actions: [
-            PopupMenuButton(
-              onSelected: (index) {
-                if (index == 0) {
-                  showConfirmDialogCustom(
-                    context,
-                    positiveText: language.lblYes,
-                    negativeText: language.lblNo,
-                    primaryColor: context.primaryColor,
-                    title: language.clearChatMessage,
-                    onAccept: (c) async {
-                      appStore.setLoading(true);
-                      await chatServices.clearAllMessages(senderId: appStore.uid, receiverId: widget.receiverUser.uid.validate()).then((value) {
-                        toast(language.chatCleared);
-                        hideKeyboard(context);
-                      }).catchError((e) {
-                        toast(e);
-                      });
-                      appStore.setLoading(false);
-                    },
-                  );
-                }
-              },
-              color: context.cardColor,
-              icon: Icon(Icons.more_vert_sharp, color: Colors.white),
-              itemBuilder: (context) {
-                List<PopupMenuItem> list = [];
-                list.add(
-                  PopupMenuItem(
-                    value: 0,
-                    child: Text(language.clearChat, style: primaryTextStyle()),
-                  ),
-                );
-                return list;
-              },
-            )
-          ],
-        ),
-        body: SizedBox(
-          height: context.height(),
-          width: context.width(),
-          child: Stack(
-            fit: StackFit.expand,
-            children: [
-              Container(
-                margin: EdgeInsets.only(bottom: widget.isChattingAllow ? 0 : 80),
-                child: FirestorePagination(
-                  reverse: true,
-                  isLive: true,
-                  padding: EdgeInsets.only(left: 8, top: 8, right: 8, bottom: 0),
-                  physics: BouncingScrollPhysics(),
-                  query: chatServices.chatMessagesWithPagination(senderId: appStore.uid.validate(), receiverUserId: widget.receiverUser.uid.validate()),
-                  initialLoader: LoaderWidget(),
-                  limit: PER_PAGE_CHAT_LIST_COUNT,
-                  onEmpty: NoDataWidget(
-                    title: language.noConversation,
-                    imageWidget: EmptyStateWidget(),
-                  ),
-                  shrinkWrap: true,
-                  viewType: ViewType.list,
-                  itemBuilder: (context, snap, index) {
-                    ChatMessageModel data = ChatMessageModel.fromJson(snap[index].data() as Map<String, dynamic>);
-                    data.isMe = data.senderId == appStore.uid;
-                    data.chatDocumentReference = snap[index].reference;
-
-                    return ChatItemWidget(chatItemData: data);
-                  },
-                ),
               ),
-              if (!widget.isChattingAllow)
-                Positioned(
-                  bottom: 16,
-                  left: 16,
-                  right: 16,
-                  child: _buildChatFieldWidget(),
-                ),
-              Observer(builder: (context) => LoaderWidget().visible(appStore.isLoading)),
-            ],
+            ),
           ),
-        ),
+        ],
       ),
     );
-  }
-
-  Future<void> _handleDocumentClick() async {
-    appStore.setLoading(true);
-    await pickFiles(
-      allowedExtensions: chatFilesAllowedExtensions,
-      maxFileSizeMB: max_acceptable_file_size,
-      type: FileType.custom,
-    ).then((pickedfiles) async {
-      await handleUploadAndSendFiles(pickedfiles);
-    }).catchError((e) {
-      toast(e);
-      log('ChatServices().uploadFiles Err: ${e}');
-      return;
-    }).whenComplete(() => appStore.setLoading(false));
-  }
-
-  Future<void> _handleCameraClick() async {
-    GetImage(ImageSource.camera, path: (path, name, xFile) async {
-      log('Path camera : ${path.toString()} name $name');
-      await handleUploadAndSendFiles([File(xFile.path)]);
-      setState(() {});
-    });
-  }
-
-  Future<void> handleUploadAndSendFiles(List<File> pickedfiles) async {
-    if (pickedfiles.isEmpty) return;
-    await SendFilePreviewScreen(pickedfiles: pickedfiles).launch(context).then((value) async {
-      debugPrint('text: ${value}');
-      debugPrint('text: ${value[MessageType.TEXT.name]}');
-      debugPrint('files: ${value[MessageType.Files.name]}');
-      debugPrint('files: ${value[MessageType.Files.name].runtimeType}');
-
-      if (value[MessageType.Files.name] is List<File>) {
-        pickedfiles = value[MessageType.Files.name];
-      }
-
-      if (value[MessageType.TEXT.name] is String) {
-        messageCont.text = value[MessageType.TEXT.name];
-      }
-
-      if (messageCont.text.trim().isNotEmpty || pickedfiles.isNotEmpty) {
-        appStore.setLoading(true);
-        await ChatServices().uploadFiles(pickedfiles).then((attached_files) async {
-          if (attached_files.isEmpty) return;
-          log('ATTACHEDFILES: ${attached_files}');
-          await sendMessages(isFile: true, attachmentFiles: attached_files).whenComplete(() => appStore.setLoading(false));
-        }).catchError((e) {
-          toast(e);
-          log('ChatServices().uploadFiles Err: ${e}');
-          return;
-        }).whenComplete(() => appStore.setLoading(false));
-      }
-    });
   }
 }

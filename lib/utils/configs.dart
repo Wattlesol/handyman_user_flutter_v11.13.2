@@ -1,9 +1,13 @@
 import 'package:country_picker/country_picker.dart';
 import 'package:flutter/material.dart';
 
-const APP_NAME = 'SANAD';
-const APP_NAME_TAG_LINE = 'trusted service requests';
-var defaultPrimaryColor = Color(0xFF4A75FB);
+const APP_NAME = 'Quick';
+const APP_NAME_AR = 'كويك';
+const APP_NAME_TAG_LINE = 'لإنجاز المعاملات الحكومية';
+var defaultPrimaryColor = Color(0xFF1F6BFF);
+const quickDeepNavy = Color(0xFF0F2933);
+const quickDarkBase = Color(0xFF0A1626);
+const quickCreamAccent = Color(0xFFF4F1DE);
 
 // Don't add slash at the end of the url
 // TODO: Replace with your actual backend server URL
@@ -11,8 +15,8 @@ var defaultPrimaryColor = Color(0xFF4A75FB);
 // For local development, you might use: const DOMAIN_URL = "http://10.0.2.2:8000"; (Android emulator)
 // For local development on iOS simulator: const DOMAIN_URL = "http://localhost:8000";
 
-const DOMAIN_URL = "https://kangoo.sa";
-// const DOMAIN_URL = "http://10.0.2.2:8000";
+const DOMAIN_URL = "https://sanad.wattlesol.com";
+// const DOMAIN_URL = "http://127.0.0.1:8000";
 const BASE_URL = '$DOMAIN_URL/api/';
 
 const DEFAULT_LANGUAGE = 'en';
@@ -28,11 +32,11 @@ const IOS_LINK_FOR_USER = "";
 const DASHBOARD_AUTO_SLIDER_SECOND = 5;
 const OTP_TEXT_FIELD_LENGTH = 6;
 
-const TERMS_CONDITION_URL = 'https://kangoo.sa/term-conditions';
-const PRIVACY_POLICY_URL = 'https://kangoo.sa/privacy-policy';
-const HELP_AND_SUPPORT_URL = 'https://kangoo.sa/help-support';
-const REFUND_POLICY_URL = 'https://kangoo.sa/refund-policy';
-const INQUIRY_SUPPORT_EMAIL = 'support@sanad.local';
+const TERMS_CONDITION_URL = 'https://sanad.wattlesol.com/term-conditions';
+const PRIVACY_POLICY_URL = 'https://sanad.wattlesol.com/privacy-policy';
+const HELP_AND_SUPPORT_URL = 'https://sanad.wattlesol.com/help-support';
+const REFUND_POLICY_URL = 'https://sanad.wattlesol.com/refund-policy';
+const INQUIRY_SUPPORT_EMAIL = 'support@quick.sa';
 
 /// You can add help line number here for contact. It's demo number
 const HELP_LINE_NUMBER = '+15265897485';

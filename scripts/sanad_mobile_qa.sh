@@ -38,7 +38,7 @@ echo "== Sanad customer mobile QA =="
 assert_contains "android/app/src/main/AndroidManifest.xml" 'android:label="Sanad"'
 assert_contains "ios/Runner/Info.plist" '<string>Sanad</string>'
 assert_contains "lib/utils/configs.dart" "const APP_NAME = 'SANAD';"
-assert_contains "lib/utils/configs.dart" 'const DOMAIN_URL = "https://kangoo.sa";'
+assert_contains "lib/utils/configs.dart" 'const DOMAIN_URL = "https://sanad.wattlesol.com";'
 assert_contains "docs/sanad-customer-mobile-walkthrough.md" "Sanad Customer Mobile Walkthrough"
 assert_contains "docs/sanad-customer-mobile-walkthrough.md" "View request list"
 assert_contains "docs/sanad-customer-mobile-walkthrough.md" "Review partner privacy"

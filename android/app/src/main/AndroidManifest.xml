@@ -14,7 +14,7 @@
 
     <application
         android:icon="@mipmap/launcher_icon"
-        android:label="Sanad"
+        android:label="Quick"
         android:requestLegacyExternalStorage="true"
         android:usesCleartextTraffic="true"
         tools:replace="android:label,android:usesCleartextTraffic">

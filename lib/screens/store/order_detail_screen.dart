@@ -7,6 +7,7 @@ import 'package:booking_system_flutter/component/empty_error_state_widget.dart';
 
 import 'package:booking_system_flutter/network/rest_apis.dart';
 import 'package:booking_system_flutter/utils/colors.dart';
+import 'package:booking_system_flutter/utils/configs.dart';
 
 class OrderDetailScreen extends StatefulWidget {
   final int orderId;
@@ -378,7 +379,7 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
     String name = item['name'] ?? item['product_name'] ?? '';
     String image = item['image'] ??
         item['product_image'] ??
-        'http://127.0.0.1:8000/images/default.png';
+        '$DOMAIN_URL/images/default.png';
     int quantity = item['quantity'] ?? 1;
     double price = double.tryParse(item['price']?.toString() ?? '0') ?? 0;
 

@@ -2439,9 +2439,9 @@ class LanguageDe extends BaseLanguage {
   String get workingDays => throw UnimplementedError();
 
   @override
-  String get sanadOperations => "Sanad Operations";
+  String get sanadOperations => "Quick Operations";
 
   @override
   String get sanadCoordinatesPartnerExecution =>
-      "Sanad koordiniert Partner- und Mitarbeiterausfuehrung intern.";
+      "Quick koordiniert Partner- und Mitarbeiterausfuehrung intern.";
 }

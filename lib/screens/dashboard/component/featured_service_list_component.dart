@@ -31,7 +31,7 @@ class FeaturedServiceListComponent extends StatelessWidget {
             label: language.lblFeatured,
             list: serviceList,
             onTap: () {
-              ViewAllServiceScreen(isFeatured: "1").launch(context);
+              ViewAllServiceScreen(isFeatured: "1", serviceList: serviceList).launch(context);
             },
           ).paddingSymmetric(horizontal: 16),
           if (serviceList.isNotEmpty)

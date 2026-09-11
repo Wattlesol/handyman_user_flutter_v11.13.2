@@ -45,16 +45,24 @@ Future<bool> subscribeToFirebaseTopic() async {
       }
 
       log('Apn Token=========${apnsToken}');
+      if (apnsToken == null) {
+        log('Skipping subscribeToTopic because APNS token is not set (simulator)');
+        return false;
+      }
     }
 
-    await FirebaseMessaging.instance.subscribeToTopic('user_${appStore.userId}').then((value) {
-      result = true;
-      log("topic-----subscribed----> user_${appStore.userId}");
-    });
-    await FirebaseMessaging.instance.subscribeToTopic(USER_APP_TAG).then((value) {
-      result = true;
-      log("topic-----subscribed----> $USER_APP_TAG");
-    });
+    try {
+      await FirebaseMessaging.instance.subscribeToTopic('user_${appStore.userId}').then((value) {
+        result = true;
+        log("topic-----subscribed----> user_${appStore.userId}");
+      });
+      await FirebaseMessaging.instance.subscribeToTopic(USER_APP_TAG).then((value) {
+        result = true;
+        log("topic-----subscribed----> $USER_APP_TAG");
+      });
+    } catch (e) {
+      log('subscribeToTopic error: $e');
+    }
   }
 
   await appStore.setPushNotificationSubscriptionStatus(result);

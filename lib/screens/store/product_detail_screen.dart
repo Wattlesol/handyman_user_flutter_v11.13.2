@@ -9,6 +9,7 @@ import 'package:booking_system_flutter/network/rest_apis.dart';
 import 'package:booking_system_flutter/screens/auth/sign_in_screen.dart';
 import 'package:booking_system_flutter/screens/store/order_checkout_screen.dart';
 import 'package:booking_system_flutter/utils/colors.dart';
+import 'package:booking_system_flutter/utils/configs.dart';
 
 class ProductDetailScreen extends StatefulWidget {
   final int productId;
@@ -117,7 +118,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
   Widget _buildProductImages() {
     List<String> images = product?.images ?? [];
     if (images.isEmpty) {
-      images = ['http://127.0.0.1:8000/images/default.png'];
+      images = ['$DOMAIN_URL/images/default.png'];
     }
 
     return Column(

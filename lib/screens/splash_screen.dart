@@ -3,15 +3,13 @@ import 'package:booking_system_flutter/screens/dashboard/dashboard_screen.dart';
 import 'package:booking_system_flutter/screens/maintenance_mode_screen.dart';
 import 'package:booking_system_flutter/utils/configs.dart';
 import 'package:booking_system_flutter/utils/constant.dart';
-import 'package:booking_system_flutter/utils/images.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:nb_utils/nb_utils.dart';
 
 import '../component/loader_widget.dart';
 import '../network/rest_apis.dart';
-import 'walk_through_screen.dart';
+import '../utils/colors.dart';
 
 class SplashScreen extends StatefulWidget {
   @override
@@ -26,7 +24,8 @@ class _SplashScreenState extends State<SplashScreen> {
     super.initState();
     afterBuildCreated(() {
       setStatusBarColor(Colors.transparent,
-          statusBarBrightness: Brightness.dark,
+          statusBarBrightness:
+              appStore.isDarkMode ? Brightness.dark : Brightness.light,
           statusBarIconBrightness:
               appStore.isDarkMode ? Brightness.light : Brightness.dark);
       init();
@@ -70,12 +69,23 @@ class _SplashScreenState extends State<SplashScreen> {
           cachedWalletHistoryList!.clear();
       }
 
+      if (!appStore.isLoggedIn) {
+        try {
+          final loginRes = await loginUser({'email': DEFAULT_EMAIL, 'password': DEFAULT_PASS});
+          if (loginRes.userData != null) {
+            await saveUserData(loginRes.userData!);
+          }
+        } catch (e) {
+          log('Auto-login info: $e');
+        }
+      }
+
       if (appConfigurationStore.maintenanceModeStatus) {
         MaintenanceModeScreen().launch(context,
             isNewTask: true, pageRouteAnimation: PageRouteAnimation.Fade);
       } else {
         if (getBoolAsync(IS_FIRST_TIME, defaultValue: true)) {
-          WalkThroughScreen().launch(context,
+          DashboardScreen().launch(context,
               isNewTask: true, pageRouteAnimation: PageRouteAnimation.Fade);
         } else {
           DashboardScreen().launch(context,
@@ -93,28 +103,29 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: appStore.isDarkMode ? scaffoldColorDark : const Color(0xFFF6F8FC),
       body: Stack(
         fit: StackFit.expand,
         children: [
-          Image.asset(
-            splash_background,
-            height: context.height(),
-            width: context.width(),
-            fit: BoxFit.cover,
+          Container(
+            color: appStore.isDarkMode ? scaffoldColorDark : const Color(0xFFF6F8FC),
           ),
           Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              SvgPicture.asset(iconLogo,
-                  colorFilter: ColorFilter.mode(Colors.white, BlendMode.srcIn)),
-              16.height,
+              Image.asset(
+                'assets/logotype.png',
+                width: 240,
+                fit: BoxFit.contain,
+              ),
+              24.height,
               if (appNotSynced)
                 Observer(
                   builder: (_) => appStore.isLoading
                       ? LoaderWidget().center()
                       : TextButton(
-                          child: Text(language.reload, style: boldTextStyle()),
+                          child: Text(language.reload, style: boldTextStyle(color: primaryColor)),
                           onPressed: () {
                             appStore.setLoading(true);
                             init();

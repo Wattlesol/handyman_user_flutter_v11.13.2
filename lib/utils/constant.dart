@@ -1,13 +1,14 @@
 import 'package:nb_utils/nb_utils.dart';
 
 /// DO NOT CHANGE THIS PACKAGE NAME
-var appPackageName = isAndroid ? 'com.iqonic.servicebooking' : 'com.iqonic.user';
+var appPackageName =
+    isAndroid ? 'com.iqonic.servicebooking' : 'com.iqonic.user';
 
 //region Custom Headers
- class CustomHeader {
- static const LanguageCode = 'language-code';
- }
- //endregion
+class CustomHeader {
+  static const LanguageCode = 'language-code';
+}
+//endregion
 
 //region Common Configs
 const DEFAULT_FIREBASE_PASSWORD = '12345678';
@@ -86,7 +87,7 @@ const LIVESTREAM_UPDATE_HELP_DESK_LIST = "LIVESTREAM_UPDATE_HELP_DESK_LIST";
 //endregion
 
 //region default USER login
-const DEFAULT_EMAIL = 'demo@user.com';
+const DEFAULT_EMAIL = 'demo@customer.com';
 const DEFAULT_PASS = '12345678';
 //endregion
 
@@ -139,9 +140,11 @@ const APPLE_FAMILY_NAME = 'APPLE_FAMILY_NAME';
 
 const BOOKING_ID_CLOSED_ = 'BOOKING_ID_CLOSED_';
 const LAST_APP_CONFIGURATION_SYNCED_TIME = 'LAST_APP_CONFIGURATION_SYNCED_TIME';
-const IS_APP_CONFIGURATION_SYNCED_AT_LEAST_ONCE = 'IS_APP_CONFIGURATION_SYNCED_AT_LEAST_ONCE';
+const IS_APP_CONFIGURATION_SYNCED_AT_LEAST_ONCE =
+    'IS_APP_CONFIGURATION_SYNCED_AT_LEAST_ONCE';
 const LAST_USER_DETAILS_SYNCED_TIME = 'LAST_USER_DETAILS_SYNCED_TIME';
-const IS_SUBSCRIBED_FOR_PUSH_NOTIFICATION = 'IS_SUBSCRIBED_FOR_PUSH_NOTIFICATION';
+const IS_SUBSCRIBED_FOR_PUSH_NOTIFICATION =
+    'IS_SUBSCRIBED_FOR_PUSH_NOTIFICATION';
 const IS_HELP_DESK_FIRST_TIME = 'IS_HELP_DESK_FIRST_TIME';
 //endregion
 
@@ -156,12 +159,15 @@ const PROMOTIONAL_BANNER_STATUS = 'promotional_banner';
 //region CURRENCY POSITION
 const CURRENCY_POSITION_LEFT = 'left';
 const CURRENCY_POSITION_RIGHT = 'right';
+const DEFAULT_CURRENCY_CODE = 'SAR';
+const DEFAULT_CURRENCY_SYMBOL = '⃁';
 //endregion
 
 //region User Types
 const USER_TYPE_PROVIDER = 'provider';
 const USER_TYPE_HANDYMAN = 'handyman';
 const USER_TYPE_USER = 'user';
+const USER_TYPE_CUSTOMER = 'customer';
 //endregion
 
 //region LOGIN TYPE
@@ -307,7 +313,8 @@ const GOOGLE_MAP_PREFIX = 'https://www.google.com/maps/search/?api=1&query=';
 
 //endregion
 
-SlideConfiguration sliderConfigurationGlobal = SlideConfiguration(duration: 400.milliseconds, delay: 50.milliseconds);
+SlideConfiguration sliderConfigurationGlobal =
+    SlideConfiguration(duration: 400.milliseconds, delay: 50.milliseconds);
 
 // region JOB REQUEST STATUS
 const JOB_REQUEST_STATUS_REQUESTED = "requested";

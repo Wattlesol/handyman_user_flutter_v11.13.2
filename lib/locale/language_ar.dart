@@ -2381,9 +2381,69 @@ class LanguageAr extends BaseLanguage {
   String get workingDays => throw UnimplementedError();
 
   @override
-  String get sanadOperations => "Sanad Operations";
+  String get sanadOperations => "عمليات كويك";
 
   @override
   String get sanadCoordinatesPartnerExecution =>
-      "Sanad coordinates partner and employee execution internally.";
+      "كويك ينسق تنفيذ الشركاء والموظفين داخلياً.";
+
+  @override
+  String get mySanad => "كويك";
+
+  @override
+  String get sanadRequests => "طلبات كويك";
+
+  @override
+  String get requestNumber => "طلب";
+
+  @override
+  String get sanadRequest => "طلب كويك";
+
+  @override
+  String get documents => "المستندات";
+
+  @override
+  String get document => "مستند";
+
+  @override
+  String get updates => "التحديثات";
+
+  @override
+  String get buzz => "تنبيه";
+
+  @override
+  String get secureChat => "المحادثة الآمنة";
+
+  @override
+  String get writeSecureMessage => "اكتب رسالة آمنة";
+
+  @override
+  String get threadAvailable => "المحادثة متاحة";
+
+  @override
+  String get aiAssistant => "المساعد الذكي";
+
+  @override
+  String get askSanadAssistant => "اسأل مساعد كويك";
+
+  @override
+  String get askAi => "اسأل المساعد";
+
+  @override
+  String get noSanadRequestFound => "لا يوجد طلب في كويك";
+
+  @override
+  String get enterMessage => "اكتب الرسالة";
+
+  @override
+  String get enterQuestion => "اكتب السؤال";
+
+  @override
+  String get messageSent => "تم إرسال الرسالة";
+
+  @override
+  String get assignedSanadSupport => "دعم كويك المخصص";
+
+  @override
+  String get sanadEmployeeCoordination => "يتم تنسيق الموظفين داخل كويك.";
 }

@@ -1513,7 +1513,49 @@ abstract class BaseLanguage {
 
   String get minQuantityRequired;
 
-  String get sanadOperations;
+  String get sanadOperations => "Quick Operations";
 
-  String get sanadCoordinatesPartnerExecution;
+  String get sanadCoordinatesPartnerExecution =>
+      "Quick coordinates partner and employee execution internally.";
+
+  String get mySanad => "Quick";
+
+  String get sanadRequests => "My Requests";
+
+  String get requestNumber => "Request";
+
+  String get sanadRequest => "Quick request";
+
+  String get documents => "Documents";
+
+  String get document => "Document";
+
+  String get updates => "Updates";
+
+  String get buzz => "Buzz";
+
+  String get secureChat => "Secure Chat";
+
+  String get writeSecureMessage => "Write a secure message";
+
+  String get threadAvailable => "Thread available";
+
+  String get aiAssistant => "AI Assistant";
+
+  String get askSanadAssistant => "Ask the Quick assistant";
+
+  String get askAi => "Ask AI";
+
+  String get noSanadRequestFound => "No Quick request found";
+
+  String get enterMessage => "Enter a message";
+
+  String get enterQuestion => "Enter a question";
+
+  String get messageSent => "Message sent";
+
+  String get assignedSanadSupport => "Assigned Quick Support";
+
+  String get sanadEmployeeCoordination =>
+      "Employee coordination is handled inside Quick.";
 }

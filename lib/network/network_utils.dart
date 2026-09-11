@@ -76,15 +76,16 @@ Future<Response> buildHttpResponse(
     } else {
       return response;
     }
-  } on Exception {
+  } on SocketException catch (e) {
+    log('SocketException: $e');
     throw errorInternetNotAvailable;
+  } catch (e) {
+    log('buildHttpResponse error: $e');
+    throw e.toString();
   }
 }
 
 Future handleResponse(Response response, {HttpResponseType httpResponseType = HttpResponseType.JSON}) async {
-  if (!await isNetworkAvailable()) {
-    throw errorInternetNotAvailable;
-  }
   if (response.statusCode == 400) {
     throw '${language.badRequest}';
   } else if (response.statusCode == 403) {

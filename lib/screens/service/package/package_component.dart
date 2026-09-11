@@ -2,6 +2,7 @@ import 'package:booking_system_flutter/component/price_widget.dart';
 import 'package:booking_system_flutter/main.dart';
 import 'package:booking_system_flutter/model/package_data_model.dart';
 import 'package:booking_system_flutter/screens/service/package/package_detail_screen.dart';
+import 'package:booking_system_flutter/screens/service/package/package_list_screen.dart';
 import 'package:booking_system_flutter/utils/common.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -53,9 +54,9 @@ class _PackageComponentState extends State<PackageComponent> {
       children: [
         ViewAllLabel(
           label: language.package,
-          list: [],
+          list: widget.servicePackage,
           onTap: () {
-            //
+            const PackageListScreen().launch(context);
           },
         ),
         AnimatedListView(

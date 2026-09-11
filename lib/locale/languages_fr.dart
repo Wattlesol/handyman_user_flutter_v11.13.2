@@ -2436,9 +2436,9 @@ class LanguageFr extends BaseLanguage {
   String get workingDays => throw UnimplementedError();
 
   @override
-  String get sanadOperations => "Sanad Operations";
+  String get sanadOperations => "Quick Operations";
 
   @override
   String get sanadCoordinatesPartnerExecution =>
-      "Sanad coordonne l'execution des partenaires et des employes en interne.";
+      "Quick coordonne l'execution des partenaires et des employes en interne.";
 }

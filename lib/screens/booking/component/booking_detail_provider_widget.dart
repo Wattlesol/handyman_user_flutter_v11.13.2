@@ -75,7 +75,7 @@ class BookingDetailProviderWidgetState
                       Row(
                         children: [
                           Marquee(
-                                  child: Text('Sanad Operations',
+                                  child: Text(language.sanadOperations,
                                       style: boldTextStyle()))
                               .flexible(),
                           16.width,
@@ -88,7 +88,7 @@ class BookingDetailProviderWidgetState
                     ],
                   ),
                   4.height,
-                  Text('Sanad coordinates partner execution internally.',
+                  Text(language.sanadCoordinatesPartnerExecution,
                       style: secondaryTextStyle(size: 12)),
                 ],
               ).expand(),

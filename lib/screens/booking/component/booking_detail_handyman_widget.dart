@@ -70,12 +70,13 @@ class BookingDetailHandymanWidgetState
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text('Assigned Sanad Support', style: boldTextStyle())
+                      Text(language.assignedSanadSupport,
+                              style: boldTextStyle())
                           .flexible(),
                     ],
                   ),
                   4.height,
-                  Text('Employee coordination is handled inside Sanad.',
+                  Text(language.sanadEmployeeCoordination,
                       style: secondaryTextStyle(size: 12)),
                 ],
               ).expand()

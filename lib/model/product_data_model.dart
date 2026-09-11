@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:nb_utils/nb_utils.dart';
 
+import '../utils/configs.dart';
 import 'multi_language_request_model.dart';
 
 class ProductData {
@@ -236,7 +237,7 @@ class ProductData {
     }
 
     // Return default image if no images found or error occurred
-    return ['http://127.0.0.1:8000/images/default.png'];
+    return ['$DOMAIN_URL/images/default.png'];
   }
 }
 

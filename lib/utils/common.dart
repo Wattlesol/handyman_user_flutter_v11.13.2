@@ -36,7 +36,9 @@ bool get isUserTypeHandyman => appStore.userType == USER_TYPE_HANDYMAN;
 
 bool get isUserTypeProvider => appStore.userType == USER_TYPE_PROVIDER;
 
-bool get isUserTypeUser => appStore.userType == USER_TYPE_USER;
+bool get isUserTypeUser =>
+    appStore.userType == USER_TYPE_USER ||
+    appStore.userType == USER_TYPE_CUSTOMER;
 
 bool get isLoginTypeUser => appStore.loginType == LOGIN_TYPE_USER;
 

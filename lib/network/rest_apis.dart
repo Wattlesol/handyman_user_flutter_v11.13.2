@@ -28,6 +28,9 @@ import 'package:booking_system_flutter/model/verify_transaction_response.dart';
 import 'package:booking_system_flutter/model/product_data_model.dart';
 import 'package:booking_system_flutter/model/product_response_model.dart';
 import 'package:booking_system_flutter/model/sanad_models.dart';
+import 'package:booking_system_flutter/model/sanad_chat_model.dart';
+import 'package:booking_system_flutter/model/sanad_request_detail_model.dart';
+import 'package:booking_system_flutter/model/package_data_model.dart';
 
 import 'package:booking_system_flutter/network/network_utils.dart';
 import 'package:booking_system_flutter/screens/dashboard/dashboard_screen.dart';
@@ -104,13 +107,6 @@ Future<Map<String, dynamic>> sendSanadChatMessage(Map request) async {
       request: request,
       method: HttpMethodType.POST)));
 }
-
-Future<SanadAiInteraction> askSanadAi(Map request) async {
-  final res = await handleResponse(await buildHttpResponse('sanad/ai/ask',
-      request: request, method: HttpMethodType.POST));
-  return SanadAiInteraction.fromJson(
-      Map<String, dynamic>.from(res['data'] ?? {}));
-}
 //endregion
 
 //region Auth Api
@@ -129,7 +125,8 @@ Future<LoginResponse> loginUser(Map request,
             request: request, method: HttpMethodType.POST)));
 
     if (res.userData != null) {
-      if (res.userData!.userType != USER_TYPE_USER) {
+      if (res.userData!.userType != USER_TYPE_USER &&
+          res.userData!.userType != USER_TYPE_CUSTOMER) {
         appStore.setLoading(false);
         throw language.lblNotValidUser;
       }
@@ -580,6 +577,36 @@ Future<List<ServiceData>> searchServiceAPI({
     lastPageCallBack?.call(res.serviceList.validate().length != PER_PAGE_ITEM);
     appStore.setLoading(false);
   } catch (e) {
+    if (latitudes.isNotEmpty || longitudes.isNotEmpty) {
+      try {
+        var res = ServiceResponse.fromJson(await handleResponse(
+          await buildHttpResponse(
+              'search-list?$categoryIds$customerId$providerIds$isPriceMinPara$isPriceMaxPara$ratingPara$subCategorys$searchPara$isFeatures$pages$perPages'),
+        ));
+
+        if (page == 1) list.clear();
+        list.addAll(res.serviceList.validate());
+
+        lastPageCallBack?.call(res.serviceList.validate().length != PER_PAGE_ITEM);
+        appStore.setLoading(false);
+        return list;
+      } catch (_) {}
+    }
+
+    try {
+      var res = ServiceResponse.fromJson(await handleResponse(
+        await buildHttpResponse(
+            'service-list?$categoryIds$providerIds$isPriceMinPara$isPriceMaxPara$ratingPara$subCategorys$searchPara$isFeatures$pages$perPages'),
+      ));
+
+      if (page == 1) list.clear();
+      list.addAll(res.serviceList.validate());
+
+      lastPageCallBack?.call(res.serviceList.validate().length != PER_PAGE_ITEM);
+      appStore.setLoading(false);
+      return list;
+    } catch (_) {}
+
     appStore.setLoading(false);
     throw e;
   }
@@ -1616,5 +1643,203 @@ Future<List<Map<String, dynamic>>> getPaymentMethods() async {
     print('Error loading payment methods: $e');
     throw e;
   }
+}
+
+//region Sanad & Quick Unified Communication APIs
+
+Future<List<SanadConversationItem>> getSanadChatConversations({
+  String? search,
+  String? filter, // 'all', 'unread', 'buzz', 'docs'
+}) async {
+  try {
+    String url = 'sanad/requests?per_page=30';
+    if (search != null && search.trim().isNotEmpty) {
+      url += '&search=${Uri.encodeComponent(search.trim())}';
+    }
+    var response = await handleResponse(await buildHttpResponse(url, method: HttpMethodType.GET));
+    List<SanadConversationItem> list = [];
+    if (response['data'] is List) {
+      for (var item in (response['data'] as List)) {
+        if (item is Map<String, dynamic>) {
+          list.add(SanadConversationItem.fromJson(item));
+        }
+      }
+    }
+
+    if (filter == 'unread') {
+      list = list.where((c) => (c.unreadCount ?? 0) > 0).toList();
+    } else if (filter == 'buzz') {
+      list = list.where((c) => (c.buzzCount ?? 0) > 0).toList();
+    } else if (filter == 'docs') {
+      list = list.where((c) => (c.documentPendingCount ?? 0) > 0).toList();
+    }
+
+    return list;
+  } catch (e) {
+    print('Error getting sanad chat conversations: $e');
+    return [];
+  }
+}
+
+Future<SanadCommunicationResponse> getRequestCommunication(int requestId) async {
+  try {
+    var response = await handleResponse(
+        await buildHttpResponse('sanad/requests/$requestId/communication', method: HttpMethodType.GET));
+    if (response['data'] is Map<String, dynamic>) {
+      return SanadCommunicationResponse.fromJson(response['data']);
+    }
+    return SanadCommunicationResponse();
+  } catch (e) {
+    print('Error getting request communication: $e');
+    throw e;
+  }
+}
+
+Future<SanadChatMessageModel> sendRequestCommunicationMessage({
+  required int requestId,
+  required String message,
+  String threadType = 'shared',
+}) async {
+  try {
+    var request = {
+      'message': message,
+      'thread_type': threadType,
+    };
+    var response = await handleResponse(await buildHttpResponse(
+      'sanad/requests/$requestId/communication',
+      request: request,
+      method: HttpMethodType.POST,
+    ));
+
+    if (response['data'] is Map<String, dynamic>) {
+      return SanadChatMessageModel.fromJson(response['data']);
+    }
+    throw 'Failed to send message';
+  } catch (e) {
+    print('Error sending communication message: $e');
+    throw e;
+  }
+}
+
+Future<void> markRequestCommunicationRead({
+  required int requestId,
+  required int threadId,
+}) async {
+  try {
+    await handleResponse(await buildHttpResponse(
+      'sanad/requests/$requestId/communication/$threadId/read',
+      method: HttpMethodType.POST,
+    ));
+  } catch (e) {
+    print('Error marking communication read: $e');
+  }
+}
+
+Future<void> acknowledgeBuzzAlert(int buzzId) async {
+  try {
+    await handleResponse(await buildHttpResponse(
+      'sanad/buzz/$buzzId/acknowledge',
+      method: HttpMethodType.POST,
+    ));
+  } catch (e) {
+    print('Error acknowledging buzz alert: $e');
+    throw e;
+  }
+}
+
+Future<SanadAiInteractionModel> askSanadAi({
+  dynamic request,
+  String? question,
+  int? requestId,
+}) async {
+  try {
+    Map req;
+    if (request is Map) {
+      req = request;
+    } else {
+      req = {
+        'question': question ?? (request is String ? request : ''),
+        if (requestId != null) 'booking_id': requestId,
+      };
+    }
+    var response = await handleResponse(await buildHttpResponse(
+      'sanad/ai/ask',
+      request: req,
+      method: HttpMethodType.POST,
+    ));
+
+    if (response['data'] is Map<String, dynamic>) {
+      return SanadAiInteractionModel.fromJson(response['data']);
+    }
+    throw 'No response from AI assistant';
+  } catch (e) {
+    print('Error asking AI: $e');
+    throw e;
+  }
+}
+
+Future<SanadRequestDetailModel> getSanadRequestDetail(int requestId) async {
+  try {
+    var response = await handleResponse(await buildHttpResponse(
+      'sanad/requests/$requestId',
+      method: HttpMethodType.GET,
+    ));
+    if (response['data'] != null) {
+      return SanadRequestDetailModel.fromJson(response['data']);
+    }
+    throw 'Invalid request detail response';
+  } catch (e) {
+    print('Error getting sanad request detail: $e');
+    throw e;
+  }
+}
+
+Future<void> uploadSanadRequestDocument({
+  required int requestId,
+  required String filePath,
+  required String documentSelection,
+}) async {
+  MultipartRequest multiPartRequest = await getMultiPartRequest('sanad/requests/$requestId/documents');
+  multiPartRequest.fields['document_selection'] = documentSelection;
+  multiPartRequest.files.add(await MultipartFile.fromPath('file', filePath));
+  multiPartRequest.headers.addAll(buildHeaderTokens());
+
+  await sendMultiPartRequest(
+    multiPartRequest,
+    onSuccess: (data) async {
+      // success
+    },
+    onError: (error) {
+      throw error;
+    },
+  );
+}
+
+Future<void> cancelSanadRequest({
+  required int requestId,
+  required String reason,
+}) async {
+  await handleResponse(await buildHttpResponse(
+    'sanad/requests/$requestId/cancel',
+    request: {'reason': reason},
+    method: HttpMethodType.POST,
+  ));
+}
+
+Future<List<BookingPackage>> getPackageListAPI({int page = 1, String perPage = 'all'}) async {
+  List<BookingPackage> list = [];
+  try {
+    var res = await handleResponse(await buildHttpResponse(
+      'package-list?page=$page&per_page=$perPage',
+      method: HttpMethodType.GET,
+    ));
+
+    if (res['data'] != null) {
+      list = (res['data'] as List).map((i) => BookingPackage.fromJson(i)).toList();
+    }
+  } catch (e) {
+    log('getPackageListAPI error: $e');
+  }
+  return list;
 }
 //endregion

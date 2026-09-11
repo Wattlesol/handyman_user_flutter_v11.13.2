@@ -3,6 +3,7 @@ import 'package:booking_system_flutter/main.dart';
 import 'package:booking_system_flutter/model/booking_data_model.dart';
 import 'package:booking_system_flutter/network/rest_apis.dart';
 import 'package:booking_system_flutter/screens/booking/booking_detail_screen.dart';
+import 'package:booking_system_flutter/screens/booking/sanad_request_detail_screen.dart';
 import 'package:booking_system_flutter/screens/booking/component/booking_item_component.dart';
 import 'package:booking_system_flutter/screens/booking/shimmer/booking_shimmer.dart';
 import 'package:booking_system_flutter/utils/constant.dart';
@@ -186,7 +187,7 @@ class _BookingFragmentState extends State<BookingFragment> {
 
                     return GestureDetector(
                       onTap: () {
-                        BookingDetailScreen(bookingId: data.id.validate()).launch(context);
+                        SanadRequestDetailScreen(requestId: data.id.validate()).launch(context);
                       },
                       child: BookingItemComponent(bookingData: data),
                     );

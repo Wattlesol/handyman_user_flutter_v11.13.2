@@ -7,29 +7,29 @@ var primaryColor = defaultPrimaryColor;
 const brandYellowLight = Color(0xFFF0B521);
 const brandRedLight = Color(0xFFEF5535);
 const brandGreenLight = Color(0xFF2DB665);
-const brandBlueLight = Color(0xFF4A75FB);
+const brandBlueLight = Color(0xFF1F6BFF);
 
 // Brand Colors - Dark Theme
 const brandYellowDark = Color(0xFF8D6710);
 const brandRedDark = Color(0xFF9B1F0B);
 const brandGreenDark = Color(0xFF005F2D);
-const brandBlueDark = Color(0xFF004CB2);
+const brandBlueDark = Color(0xFF0F2933);
 
-// Legacy colors (keeping for compatibility)
-const secondaryPrimaryColor = Color(0xfff3f4fa);
-const lightPrimaryColor = Color(0xffebebf7);
-const primaryLightColor = Color(0xFFEFEFF8);
+// Quick Brand Theme Colors
+const secondaryPrimaryColor = Color(0xFFF4F1DE);
+const lightPrimaryColor = Color(0xFFEFF5FF);
+const primaryLightColor = Color(0xFFE8F1FF);
 
 //Text Color
-const appTextPrimaryColor = Color(0xff1C1F34);
-const appTextSecondaryColor = Color(0xff6C757D);
-const cardColor = Color(0xFFF6F7F9);
-const borderColor = Color(0xFFEBEBEB);
+const appTextPrimaryColor = Color(0xFF0A1626);
+const appTextSecondaryColor = Color(0xFF5A6B82);
+const cardColor = Color(0xFFF6F8FC);
+const borderColor = Color(0xFFE2E8F0);
 
 // Updated Dark Theme Colors
-const scaffoldColorDark = Color(0xFF0F0F0F);
-const scaffoldSecondaryDark = Color(0xFF1A1A1A);
-const appButtonColorDark = Color(0xFF2A2A2A);
+const scaffoldColorDark = Color(0xFF0A1626);
+const scaffoldSecondaryDark = Color(0xFF0F2933);
+const appButtonColorDark = Color(0xFF1F6BFF);
 
 const ratingBarColor = brandYellowLight;
 const verifyAcColor = brandBlueLight;
